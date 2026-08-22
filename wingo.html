@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JOLY444 Game</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #2e0854; color: #ffffff; max-width: 450px; margin: 0 auto; min-height: 100vh; padding-bottom: 30px; position: relative; }
+
+    /* Header & Wallet */
+    .header { background-color: #4c1d95; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid rgba(168, 85, 247, 0.2); }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    
+    /* Modern Stylish Back Button */
+    .btn-back {
+      display: flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(250, 204, 21, 0.3);
+      color: #facc15; text-decoration: none; transition: all 0.2s ease;
+      backdrop-filter: blur(4px); box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    .btn-back:active { transform: scale(0.92); background: rgba(250, 204, 21, 0.2); }
+
+    .brand { font-size: 20px; font-weight: 900; color: #facc15; letter-spacing: 1px; }
+    .wallet-card { margin: 15px; padding: 20px; background: linear-gradient(135deg, #581c87, #6b21a8); border-radius: 16px; border: 1px solid rgba(168, 85, 247, 0.3); text-align: center; }
+    .wallet-title { font-size: 12px; color: #d8b4fe; text-transform: uppercase; }
+    .wallet-balance { font-size: 32px; font-weight: 900; margin: 8px 0 15px 0; }
+    .wallet-actions { display: flex; gap: 10px; }
+    .btn-action { flex: 1; padding: 10px; border: none; border-radius: 10px; font-weight: bold; color: white; cursor: pointer; }
+    .btn-withdraw { background-color: #ef4444; } .btn-deposit { background-color: #10b981; }
+
+    /* Market Tabs */
+    .market-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 0 15px; margin-bottom: 15px; }
+    .tab-btn { background-color: #3b0764; border: 1px solid #6b21a8; border-radius: 12px; padding: 10px 5px; color: white; font-weight: bold; font-size: 12px; cursor: pointer; opacity: 0.7; }
+    .tab-btn.active { background-color: #6b21a8; border: 2px solid #facc15; opacity: 1; }
+
+    /* Game Box */
+    .game-box { margin: 15px; padding: 15px; background: linear-gradient(135deg, #4c1d95, #3b0764); border-radius: 16px; border: 1px solid rgba(168, 85, 247, 0.3); display: flex; justify-content: space-between; align-items: center; }
+    .period-label { font-size: 12px; color: #c084fc; }
+    .period-val { font-size: 15px; font-weight: bold; color: #facc15; margin-top: 4px; }
+    .timer-label { font-size: 12px; color: #c084fc; text-align: right; }
+    .timer-val { font-size: 28px; font-weight: 900; color: #facc15; text-align: right; }
+    .recent-balls { display: flex; gap: 4px; margin-top: 8px; }
+    .ball-sm { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; }
+
+    /* BET AREA CONTAINER & MODERN LOCK OVERLAY */
+    .bet-container-wrapper { position: relative; margin-bottom: 15px; }
+    .bet-lock-overlay {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(20, 5, 38, 0.75); backdrop-filter: blur(6px);
+      z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      border-radius: 18px; border: 1.5px solid rgba(239, 68, 68, 0.5);
+      transition: all 0.3s ease; box-shadow: inset 0 0 20px rgba(239, 68, 68, 0.2);
+    }
+    .bet-lock-overlay.hidden { display: none !important; }
+    .lock-timer-box { display: flex; gap: 8px; align-items: center; }
+    .lock-timer-box span {
+      background: linear-gradient(145deg, #ff416c, #ff4b2b);
+      color: #ffffff; font-size: 48px; font-weight: 900;
+      padding: 6px 20px; border-radius: 14px;
+      box-shadow: 0 8px 20px rgba(255, 75, 43, 0.4);
+      font-family: 'Courier New', Courier, monospace;
+      letter-spacing: 2px; text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .lock-text {
+      margin-top: 8px; font-size: 12px; font-weight: 800; color: #fca5a5;
+      text-transform: uppercase; letter-spacing: 2px;
+    }
+
+    /* Betting Controls */
+    .color-section { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 15px; margin-bottom: 15px; }
+    .btn-color { padding: 12px; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; color: white; cursor: pointer; }
+    .btn-green { background-color: #059669; } .btn-violet { background-color: #8b5cf6; } .btn-red { background-color: #dc2626; }
+    .number-box { margin: 0 15px; padding: 15px; background-color: #3b0764; border-radius: 16px; border: 1px solid rgba(168, 85, 247, 0.2); }
+    .number-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+    .btn-num { width: 48px; height: 48px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); font-size: 18px; font-weight: 900; color: white; margin: 0 auto; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .size-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px; }
+    .btn-size { padding: 10px; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; color: white; cursor: pointer; }
+    .btn-big { background-color: #d97706; } .btn-small { background-color: #3b82f6; }
+
+    /* Selection Colors */
+    .bg-green { background-color: #059669 !important; color: white; }
+    .bg-red { background-color: #dc2626 !important; color: white; }
+    .bg-violet { background-color: #8b5cf6 !important; color: white; }
+    .bg-red-violet { background: linear-gradient(135deg, #dc2626 50%, #8b5cf6 50%) !important; color: white; }
+    .bg-green-violet { background: linear-gradient(135deg, #059669 50%, #8b5cf6 50%) !important; color: white; }
+    .bg-big { background-color: #d97706 !important; color: white; }
+    .bg-small { background-color: #3b82f6 !important; color: white; }
+
+    /* History Navigation Tabs */
+    .history-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 20px 15px 10px 15px; }
+    .history-tab-btn { 
+      background-color: #3b0764; 
+      color: #c084fc; 
+      border: 1px solid #6b21a8; 
+      padding: 10px 4px; 
+      border-radius: 10px; 
+      font-weight: bold; 
+      font-size: 13px; 
+      cursor: pointer; 
+      transition: all 0.2s ease;
+    }
+    .history-tab-btn.active { 
+      background-color: #6b21a8; 
+      color: #facc15; 
+      border: 1px solid #facc15;
+    }
+
+    /* History Container */
+    .history-card { margin: 0 15px 0 15px; background-color: #3b0764; border-top-left-radius: 16px; border-top-right-radius: 16px; overflow: hidden; border: 1px solid rgba(168, 85, 247, 0.2); border-bottom: none; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; }
+    th { padding: 8px 2px; color: #c084fc; border-bottom: 1px solid #581c87; background-color: #4c1d95; }
+    td { padding: 8px 2px; border-bottom: 1px solid rgba(88, 28, 135, 0.4); color: #e9d5ff; }
+    .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin: 0 1px; }
+
+    /* Chart Table Style */
+    .chart-container { position: relative; overflow-x: auto; }
+    #chart-canvas { position: absolute; top: 0; left: 0; pointer-events: none; z-index: 2; }
+    .num-ball-chart { width: 18px; height: 18px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; }
+    .bs-badge { width: 18px; height: 18px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; color: white; }
+    .badge-b { background-color: #d97706; } .badge-s { background-color: #3b82f6; }
+
+    /* My History Card View */
+    .my-history-card { background: #ffffff; color: #374151; margin: 10px; padding: 12px; border-radius: 12px; border: 1px solid #e5e7eb; }
+    .my-history-header { display: flex; justify-content: space-between; align-items: center; }
+    .selection-badge { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; color: white; text-align: center; }
+    .status-pill { border-radius: 6px; padding: 2px 8px; font-size: 11px; font-weight: bold; border: 1px solid; }
+    .status-pill.succeed { color: #10b981; border-color: #a7f3d0; background: #ecfdf5; }
+    .status-pill.failed { color: #ef4444; border-color: #fca5a5; background: #fef2f2; }
+    .status-pill.pending { color: #d97706; border-color: #fde68a; background: #fffbe3; }
+
+    .my-history-details { background: #f9fafb; border-radius: 8px; padding: 10px; margin-top: 10px; font-size: 12px; border: 1px solid #f3f4f6; }
+    .detail-row { display: flex; justify-content: space-between; margin-bottom: 6px; color: #6b7280; font-weight: 500; }
+    .detail-row span:last-child { color: #111827; font-weight: 600; }
+
+    /* Common Pagination Bar Styling */
+    .pagination-container {
+      display: flex; justify-content: center; align-items: center; gap: 25px;
+      padding: 12px 0 15px 0; background-color: #3b0764; margin: 0 15px 15px 15px;
+      border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;
+      border: 1px solid rgba(168, 85, 247, 0.2); border-top: none;
+    }
+    .nav-btn {
+      width: 40px; height: 35px; border: 1px solid #6b21a8; border-radius: 8px;
+      background-color: #4c1d95; color: #c084fc; font-size: 16px; font-weight: bold; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;
+    }
+    .nav-btn.active-nav { 
+      background-color: #facc15; 
+      color: #3b0764; 
+      border-color: #facc15;
+      box-shadow: 0 0 10px rgba(250, 204, 21, 0.4);
+    }
+    #pageIndicator { font-size: 14px; color: #d8b4fe; font-weight: 700; }
+
+    /* Dynamic Color Bet Popup Modal */
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.65); display: flex; align-items: flex-end; justify-content: center; z-index: 200; opacity: 0; pointer-events: none; transition: 0.3s ease; }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .bet-modal { background: #ffffff; color: #333333; width: 100%; max-width: 450px; border-top-left-radius: 20px; border-top-right-radius: 20px; overflow: hidden; animation: slideUp 0.3s ease; }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .modal-header { padding: 14px; text-align: center; color: white; font-weight: bold; font-size: 16px; transition: background 0.3s ease; }
+    .modal-select-title { background: #f3f4f6; margin: 10px 20px; padding: 8px; border-radius: 8px; text-align: center; font-weight: bold; font-size: 14px; transition: 0.3s ease; }
+    .modal-body { padding: 15px 20px; }
+    .modal-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; font-weight: 600; color: #4b5563; }
+    .btn-group { display: flex; gap: 6px; flex-wrap: wrap; }
+    .m-btn { padding: 6px 12px; border: 1px solid #e5e7eb; background: #f9fafb; border-radius: 6px; font-weight: bold; cursor: pointer; color: #374151; transition: 0.2s ease; }
+    .m-btn.active { color: white !important; }
+    .qty-control { display: flex; align-items: center; background: #f3f4f6; border-radius: 6px; }
+    .qty-btn { width: 32px; height: 32px; border: none; color: white; font-size: 18px; font-weight: bold; cursor: pointer; border-radius: 6px; transition: 0.3s ease; }
+    .qty-input { width: 50px; text-align: center; border: none; background: transparent; font-weight: bold; font-size: 14px; }
+    
+    .custom-amount-input { width: 100%; padding: 10px; font-size: 15px; font-weight: bold; border: 2px solid #e5e7eb; border-radius: 8px; text-align: center; color: #111827; outline: none; margin-top: 5px; }
+    .custom-amount-input:focus { border-color: #6b21a8; }
+
+    .modal-footer { display: flex; border-top: 1px solid #e5e7eb; }
+    .btn-modal-cancel { flex: 1; padding: 14px; border: none; background: #f3f4f6; color: #6b7280; font-weight: bold; cursor: pointer; }
+    .btn-modal-submit { flex: 2; padding: 14px; border: none; color: white; font-weight: bold; cursor: pointer; transition: 0.3s ease; }
+
+    /* Success Notification Modal */
+    .success-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8); background: #ffffff; color: #111827; padding: 25px; border-radius: 16px; text-align: center; z-index: 300; opacity: 0; pointer-events: none; transition: 0.3s ease; box-shadow: 0 10px 25px rgba(0,0,0,0.3); width: 80%; max-width: 320px; }
+    .success-modal.active { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+    .success-icon { width: 50px; height: 50px; background: #10b981; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; margin: 0 auto 12px auto; }
+
+    /* WIN & LOSS POPUPS */
+    .popup-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.75); display: flex; align-items: center; justify-content: center;
+      z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+    }
+    .popup-overlay.active { opacity: 1; pointer-events: auto; }
+    .popup-card {
+      width: 290px; padding: 20px; border-radius: 20px; text-align: center;
+      position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transform: scale(0.8); transition: transform 0.3s ease;
+    }
+    .popup-overlay.active .popup-card { transform: scale(1); }
+    .win-card { background: linear-gradient(180deg, #ff7e5f, #feb47b); color: #fff; }
+    .loss-card { background: linear-gradient(180deg, #a1c4fd, #c2e9fb); color: #333; }
+    .header-badge {
+      width: 60px; height: 60px; margin: -50px auto 10px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; font-size: 28px;
+    }
+    .win-badge { background: #ffaa00; border: 3px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+    .loss-badge { background: #88a0c0; border: 3px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+    .result-tags { display: flex; justify-content: center; gap: 6px; margin: 10px 0; }
+    .tag { padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; color: #fff; }
+    .tag-red { background: #ef4444; } .tag-green { background: #10b981; } .tag-violet { background: #8b5cf6; }
+    .tag-num { background: #4b5563; } .tag-small { background: #3b82f6; } .tag-big { background: #d97706; }
+    .ticket-box { background: #fff; color: #333; border-radius: 12px; padding: 12px; margin: 15px 0; box-shadow: inset 0 0 5px rgba(0,0,0,0.1); }
+    .amount { font-size: 28px; color: #ef4444; margin: 5px 0; font-weight: 900; }
+    .loss-amount { color: #6b7280; font-size: 24px; font-weight: 800; }
+    .sub-text { font-size: 11px; color: #6b7280; margin-top: 4px; }
+    .auto-close { font-size: 12px; margin-top: 10px; opacity: 0.9; display: flex; align-items: center; justify-content: center; gap: 5px; }
+    .close-btn {
+      position: absolute; bottom: -50px; left: 50%; transform: translateX(-50%);
+      background: transparent; border: 2px solid #fff; color: #fff;
+      width: 36px; height: 36px; border-radius: 50%; font-size: 18px; cursor: pointer;
+    }
+  </style> 
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDEndkTBhWD2Lo4ePYHQ9Lz-Fec4KS1E78",
+    projectId: "joly444-f4b83",
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
+</head>
+<body>
+
+  <!-- Header with Modern Back Button -->
+  <div class="header">
+    <div class="header-left">
+      <a href="index.html" class="btn-back" title="Go Home">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+      </a>
+      <div class="brand">👑 JOLY444</div>
+    </div>
+    <div style="font-size: 18px;">🎧 🔔</div>
+  </div>
+
+  <!-- Wallet -->
+  <div class="wallet-card">
+    <div class="wallet-title">Wallet Balance</div>
+    <div class="wallet-balance">৳ <span id="user-balance">1000.00</span></div>
+    <div class="wallet-actions">
+      <button onclick="alert('Withdraw')" class="btn-action btn-withdraw">Withdraw</button>
+      <button onclick="alert('Deposit')" class="btn-action btn-deposit">Deposit</button>
+    </div>
+  </div>
+
+  <!-- Market Tabs -->
+  <div class="market-tabs">
+    <button onclick="switchMarket('30s')" id="tab-30s" class="tab-btn active">⏱️ 30 Sec</button>
+    <button onclick="switchMarket('1m')" id="tab-1m" class="tab-btn">⏱️ 1 Min</button>
+    <button onclick="switchMarket('3m')" id="tab-3m" class="tab-btn">⏱️ 3 Min</button>
+    <button onclick="switchMarket('5m')" id="tab-5m" class="tab-btn">⏱️ 5 Min</button>
+  </div>
+
+  <!-- Period & Timer -->
+  <div class="game-box">
+    <div>
+      <div class="period-label">🏆 Period</div>
+      <div id="period-id" class="period-val">202608210001</div>
+      <div id="recent-balls" class="recent-balls"></div>
+    </div>
+    <div>
+      <div class="timer-label">Time Remaining</div>
+      <div id="timer-display" class="timer-val">00:30</div>
+    </div>
+  </div>
+
+  <!-- BET CONTAINER WRAPPER -->
+  <div class="bet-container-wrapper">
+    
+    <!-- 5 Sec Countdown Lock Overlay -->
+    <div id="betLockOverlay" class="bet-lock-overlay hidden">
+      <div class="lock-timer-box">
+        <span>0</span>
+        <span id="lockSecDigit">5</span>
+      </div>
+      <div class="lock-text">Betting Locked</div>
+    </div>
+
+    <!-- Color Buttons -->
+    <div class="color-section">
+      <button onclick="openBetModal('Green')" class="btn-color btn-green">Green</button>
+      <button onclick="openBetModal('Violet')" class="btn-color btn-violet">Violet</button>
+      <button onclick="openBetModal('Red')" class="btn-color btn-red">Red</button>
+    </div>
+
+    <!-- Number Balls -->
+    <div class="number-box">
+      <div class="number-grid">
+        <button onclick="openBetModal(0)" class="btn-num bg-red-violet">0</button>
+        <button onclick="openBetModal(1)" class="btn-num bg-green">1</button>
+        <button onclick="openBetModal(2)" class="btn-num bg-red">2</button>
+        <button onclick="openBetModal(3)" class="btn-num bg-green">3</button>
+        <button onclick="openBetModal(4)" class="btn-num bg-red">4</button>
+        <button onclick="openBetModal(5)" class="btn-num bg-green-violet">5</button>
+        <button onclick="openBetModal(6)" class="btn-num bg-red">6</button>
+        <button onclick="openBetModal(7)" class="btn-num bg-green">7</button>
+        <button onclick="openBetModal(8)" class="btn-num bg-red">8</button>
+        <button onclick="openBetModal(9)" class="btn-num bg-green">9</button>
+      </div>
+
+      <div class="size-grid">
+        <button onclick="openBetModal('Big')" class="btn-size btn-big">Big</button>
+        <button onclick="openBetModal('Small')" class="btn-size btn-small">Small</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- History Navigation Tabs -->
+  <div class="history-tabs">
+    <button onclick="switchHistoryTab('game')" id="htab-game" class="history-tab-btn active">Game history</button>
+    <button onclick="switchHistoryTab('chart')" id="htab-chart" class="history-tab-btn">Chart</button>
+    <button onclick="switchHistoryTab('my')" id="htab-my" class="history-tab-btn">My history</button>
+  </div>
+
+  <!-- History Container -->
+  <div class="history-card">
+    <div id="view-game-history">
+      <table>
+        <thead>
+          <tr><th>Period</th><th>Number</th><th>Big Small</th><th>Color</th></tr>
+        </thead>
+        <tbody id="game-history-body"></tbody>
+      </table>
+    </div>
+
+    <div id="view-chart-history" style="display: none;" class="chart-container">
+      <canvas id="chart-canvas"></canvas>
+      <table id="chart-table">
+        <thead>
+          <tr><th style="width: 30%;">Period</th><th style="width: 70%;">Number</th></tr>
+        </thead>
+        <tbody>
+          <tr style="background: #4c1d95; font-size: 11px;">
+            <td style="font-weight: bold;">Statistic</td>
+            <td style="padding: 5px 0;">
+              <div style="display: flex; justify-content: space-around; color: #c084fc; font-weight: bold; margin-bottom: 2px;">
+                <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span>
+              </div>
+            </td>
+          </tr>
+          <tr style="font-size: 10px; color: #d8b4fe;">
+            <td>Missing</td>
+            <td><div style="display: flex; justify-content: space-around;"><span>4</span><span>3</span><span>6</span><span>1</span><span>27</span><span>9</span><span>0</span><span>13</span><span>2</span><span>8</span></div></td>
+          </tr>
+          <tr style="font-size: 10px; color: #d8b4fe;">
+            <td>Avg missing</td>
+            <td><div style="display: flex; justify-content: space-around;"><span>6</span><span>9</span><span>6</span><span>6</span><span>13</span><span>7</span><span>8</span><span>8</span><span>9</span><span>10</span></div></td>
+          </tr>
+          <tr style="font-size: 10px; color: #d8b4fe;">
+            <td>Frequency</td>
+            <td><div style="display: flex; justify-content: space-around;"><span>12</span><span>9</span><span>13</span><span>12</span><span>6</span><span>11</span><span>10</span><span>10</span><span>9</span><span>8</span></div></td>
+          </tr>
+          <tr style="font-size: 10px; color: #d8b4fe; border-bottom: 2px solid #6b21a8;">
+            <td>Max consecutive</td>
+            <td><div style="display: flex; justify-content: space-around;"><span>2</span><span>1</span><span>2</span><span>2</span><span>2</span><span>2</span><span>2</span><span>1</span><span>2</span><span>1</span></div></td>
+          </tr>
+        </tbody>
+        <tbody id="chart-history-body"></tbody>
+      </table>
+    </div>
+
+    <div id="view-my-history" style="display: none;">
+      <div id="my-history-container"></div>
+    </div>
+  </div>
+
+  <!-- Common Pagination Container -->
+  <div class="pagination-container">
+    <button class="nav-btn" id="prevBtn" onclick="changePage(-1)">&lt;</button>
+    <span id="pageIndicator">1/50</span>
+    <button class="nav-btn active-nav" id="nextBtn" onclick="changePage(1)">&gt;</button>
+  </div>
+
+  <!-- Bet Dynamic Color Modal -->
+  <div id="bet-modal-overlay" class="modal-overlay" onclick="closeBetModalOnBlank(event)">
+    <div class="bet-modal" onclick="event.stopPropagation()">
+      <div id="modal-header-bg" class="modal-header">WinGo <span id="modal-market-name">30sec</span></div>
+      <div id="modal-title-bg" class="modal-select-title">Select <span id="modal-select-val">Big</span></div>
+      <div class="modal-body">
+        
+        <div class="modal-row">
+          <span>Balance Amount</span>
+          <div class="btn-group">
+            <button onclick="setBaseBalance(1)" class="m-btn b-base active">1</button>
+            <button onclick="setBaseBalance(10)" class="m-btn b-base">10</button>
+            <button onclick="setBaseBalance(100)" class="m-btn b-base">100</button>
+            <button onclick="setBaseBalance(1000)" class="m-btn b-base">1000</button>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <input type="number" id="customAmountInput" class="custom-amount-input" placeholder="Type custom amount (৳)" oninput="onCustomAmountChange()">
+        </div>
+
+        <div class="modal-row">
+          <span>Quantity</span>
+          <div class="qty-control">
+            <button onclick="updateQty(-1)" id="qty-btn-minus" class="qty-btn">-</button>
+            <input type="text" id="modal-qty" class="qty-input" value="1" readonly>
+            <button onclick="updateQty(1)" id="qty-btn-plus" class="qty-btn">+</button>
+          </div>
+        </div>
+
+        <div class="modal-row">
+          <span>Multiplier</span>
+          <div class="btn-group">
+            <button onclick="setMultiplier(1)" class="m-btn b-mult active">X1</button>
+            <button onclick="setMultiplier(5)" class="m-btn b-mult">X5</button>
+            <button onclick="setMultiplier(10)" class="m-btn b-mult">X10</button>
+            <button onclick="setMultiplier(20)" class="m-btn b-mult">X20</button>
+            <button onclick="setMultiplier(50)" class="m-btn b-mult">X50</button>
+            <button onclick="setMultiplier(100)" class="m-btn b-mult">X100</button>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeBetModal()" class="btn-modal-cancel">Cancel</button>
+        <button onclick="submitBet()" id="modal-submit-btn" class="btn-modal-submit">Total amount ৳<span id="modal-total-amount">1.00</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WIN POPUP MODAL -->
+  <div id="winPopup" class="popup-overlay">
+    <div class="popup-card win-card">
+      <div class="header-badge win-badge">🚀</div>
+      <h2>Congratulations</h2>
+      <div class="result-tags">
+        <span class="tag tag-red" id="winTagColor">Red</span>
+        <span class="tag tag-num" id="winTagNum">6</span>
+        <span class="tag tag-big" id="winTagBS">Big</span>
+      </div>
+      <div class="ticket-box">
+        <p class="sub-text" style="color:#d97706; font-weight:bold;">Bonus</p>
+        <h1 class="amount">৳<span id="winAmountVal">1.98</span></h1>
+        <p class="sub-text">Period: WinGo <span id="winPeriodName">30sec</span><br><span id="winPeriodId">20260821100052042</span></p>
+      </div>
+      <div class="auto-close"><input type="checkbox" checked disabled> 3 seconds auto close</div>
+      <button class="close-btn" onclick="closePopup('winPopup')">✕</button>
+    </div>
+  </div>
+
+  <!-- LOSS POPUP MODAL -->
+  <div id="lossPopup" class="popup-overlay">
+    <div class="popup-card loss-card">
+      <div class="header-badge loss-badge">🚀</div>
+      <h2 style="color: #4b5563;">Sorry</h2>
+      <div class="result-tags">
+        <span class="tag tag-violet" id="lossTagColor">Red Violet</span>
+        <span class="tag tag-num" id="lossTagNum">0</span>
+        <span class="tag tag-small" id="lossTagBS">Small</span>
+      </div>
+      <div class="ticket-box">
+        <h1 class="amount loss-amount">Lose</h1>
+        <p class="sub-text">Period: WinGo <span id="lossPeriodName">30sec</span><br><span id="lossPeriodId">20260821100052041</span></p>
+      </div>
+      <div class="auto-close" style="color: #4b5563;"><input type="checkbox" checked disabled> 3 seconds auto close</div>
+      <button class="close-btn" onclick="closePopup('lossPopup')">✕</button>
+    </div>
+  </div>
+
+  <!-- Custom Bet Success Notification Modal -->
+  <div id="success-modal" class="success-modal">
+    <div class="success-icon">✓</div>
+    <div style="font-size: 18px; font-weight: 800; color: #111827; margin-bottom: 4px;">Bet Successful</div>
+    <div style="font-size: 13px; color: #6b7280;" id="success-msg">Your bet has been placed!</div>
+  </div>
+
+  <script>
+    // Phone Physical Back Button Redirect
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+      window.location.href = "index.html";
+    };
+
+    let audioCtx = null;
+
+    function initAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playBeepSound(type) {
+      try {
+        initAudioContext();
+        if (!audioCtx) return;
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        if (type === 'tick') {
+          osc.frequency.setValueAtTime(800, audioCtx.currentTime); 
+          gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+          osc.start(audioCtx.currentTime);
+          osc.stop(audioCtx.currentTime + 0.15);
+        } else if (type === 'finish') {
+          osc.frequency.setValueAtTime(1200, audioCtx.currentTime); 
+          gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+          osc.start(audioCtx.currentTime);
+          osc.stop(audioCtx.currentTime + 0.5);
+        }
+      } catch (e) {
+        console.log("Audio play error:", e);
+      }
+    }
+
+    window.addEventListener('click', initAudioContext, { once: true });
+    window.addEventListener('touchstart', initAudioContext, { once: true });
+
+    let userBalance = 1000.00;
+
+    const markets = {
+      '30s': { name: '30sec', duration: 30, timer: 30, period: 202608210001, history: [], myBets: [] },
+      '1m':  { name: '1 Min', duration: 60, timer: 60, period: 202608211001, history: [], myBets: [] },
+      '3m':  { name: '3 Min', duration: 180, timer: 180, period: 202608213001, history: [], myBets: [] },
+      '5m':  { name: '5 Min', duration: 300, timer: 300, period: 202608215001, history: [], myBets: [] }
+    };
+
+    let activeMarket = '30s';
+    let activeHistoryTab = 'game';
+    const PAGE_SIZE = 10;
+
+    const paginationState = {
+      game: { current: 1, total: 50 },
+      chart: { current: 1, total: 50 },
+      my: { current: 1, total: 50 }
+    };
+
+    let currentSelection = null;
+    let baseBalance = 1;
+    let currentQty = 1;
+    let currentMultiplier = 1;
+    let activeThemeColor = '#f59e0b';
+
+    let expandedCardIndex = null;
+    let winLossTimeout = null;
+
+    Object.keys(markets).forEach(key => {
+      for (let i = 0; i < 50; i++) {
+        let num = Math.floor(Math.random() * 10);
+        markets[key].history.push({
+          period: markets[key].period - (i + 1),
+          number: num,
+          size: num >= 5 ? 'Big' : 'Small',
+          color: getColor(num)
+        });
+      }
+    });
+
+    function getColor(num) {
+      if (num === 0) return 'Red-Violet';
+      if (num === 5) return 'Green-Violet';
+      return num % 2 === 0 ? 'Red' : 'Green';
+    }
+
+    function getSelectionColorClass(selection) {
+      if (selection === 'Green') return 'bg-green';
+      if (selection === 'Red') return 'bg-red';
+      if (selection === 'Violet') return 'bg-violet';
+      if (selection === 'Big') return 'bg-big';
+      if (selection === 'Small') return 'bg-small';
+      if (selection === 0) return 'bg-red-violet';
+      if (selection === 5) return 'bg-green-violet';
+      if (typeof selection === 'number') {
+        return selection % 2 === 0 ? 'bg-red' : 'bg-green';
+      }
+      return 'bg-violet';
+    }
+
+    function getThemeColor(selection) {
+      if (selection === 'Green') return '#059669';
+      if (selection === 'Red') return '#dc2626';
+      if (selection === 'Violet') return '#8b5cf6';
+      if (selection === 'Big') return '#d97706';
+      if (selection === 'Small') return '#3b82f6';
+      if (selection === 0) return 'linear-gradient(135deg, #dc2626 50%, #8b5cf6 50%)';
+      if (selection === 5) return 'linear-gradient(135deg, #059669 50%, #8b5cf6 50%)';
+      if (typeof selection === 'number') {
+        return selection % 2 === 0 ? '#dc2626' : '#059669';
+      }
+      return '#f59e0b';
+    }
+
+    function switchMarket(marketKey) {
+      activeMarket = marketKey;
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(`tab-${marketKey}`).classList.add('active');
+      updateUI();
+    }
+
+    function switchHistoryTab(tabName) {
+      activeHistoryTab = tabName;
+      document.querySelectorAll('.history-tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(`htab-${tabName}`).classList.add('active');
+
+      document.getElementById('view-game-history').style.display = tabName === 'game' ? 'block' : 'none';
+      document.getElementById('view-chart-history').style.display = tabName === 'chart' ? 'block' : 'none';
+      document.getElementById('view-my-history').style.display = tabName === 'my' ? 'block' : 'none';
+
+      updatePaginationUI();
+      updateUI();
+    }
+
+    function changePage(direction) {
+      const tabState = paginationState[activeHistoryTab];
+      const newPage = tabState.current + direction;
+
+      if (newPage >= 1 && newPage <= tabState.total) {
+        tabState.current = newPage;
+        updatePaginationUI();
+        updateUI();
+      }
+    }
+
+    function updatePaginationUI() {
+      const { current, total } = paginationState[activeHistoryTab];
+      document.getElementById('pageIndicator').innerText = `${current}/${total}`;
+
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+
+      if (current <= 1) {
+        prevBtn.classList.remove('active-nav');
+      } else {
+        prevBtn.classList.add('active-nav');
+      }
+
+      if (current >= total) {
+        nextBtn.classList.remove('active-nav');
+      } else {
+        nextBtn.classList.add('active-nav');
+      }
+    }
+
+    setInterval(() => {
+      Object.keys(markets).forEach(key => {
+        let m = markets[key];
+        m.timer--;
+
+        if (key === activeMarket) {
+          if (m.timer <= 5 && m.timer > 0) {
+            playBeepSound('tick');
+          } else if (m.timer === 0) {
+            playBeepSound('finish');
+          }
+        }
+
+        if (m.timer <= 0) {
+          let winNum = Math.floor(Math.random() * 10);
+          let newResult = {
+            period: m.period,
+            number: winNum,
+            size: winNum >= 5 ? 'Big' : 'Small',
+            color: getColor(winNum)
+          };
+
+          m.history.unshift(newResult);
+
+          let totalWinThisRound = 0;
+          let hasActiveBets = false;
+          let lastBetResult = null;
+
+          m.myBets.forEach(bet => {
+            if (bet.period === m.period && bet.status === 'Pending') {
+              hasActiveBets = true;
+              let winMultiplier = 0;
+
+              if (typeof bet.select === 'number') {
+                if (bet.select === winNum) winMultiplier = 8.9;
+              } 
+              else if (bet.select === 'Big' && winNum >= 5) winMultiplier = 1.98;
+              else if (bet.select === 'Small' && winNum < 5) winMultiplier = 1.98;
+              else if (bet.select === 'Violet' && (winNum === 0 || winNum === 5)) winMultiplier = 5.0;
+              else if (bet.select === 'Green') {
+                if (winNum === 1 || winNum === 3 || winNum === 7 || winNum === 9) winMultiplier = 1.98;
+                else if (winNum === 5) winMultiplier = 1.47;
+              } 
+              else if (bet.select === 'Red') {
+                if (winNum === 2 || winNum === 4 || winNum === 6 || winNum === 8) winMultiplier = 1.98;
+                else if (winNum === 0) winMultiplier = 1.47;
+              }
+
+              bet.resultNumber = winNum;
+              bet.resultColor = newResult.color;
+              bet.resultSize = newResult.size;
+
+              if (winMultiplier > 0) {
+                let winAmount = bet.taxAmount * winMultiplier;
+                bet.status = 'Succeed';
+                bet.winAmount = winAmount;
+                userBalance += winAmount;
+                totalWinThisRound += winAmount;
+                lastBetResult = 'win';
+              } else {
+                bet.status = 'Failed';
+                bet.winAmount = -bet.amount;
+                if(lastBetResult !== 'win') lastBetResult = 'loss';
+              }
+            }
+          });
+
+          if (key === activeMarket && hasActiveBets) {
+            triggerWinLossPopup(lastBetResult, newResult, totalWinThisRound, m.name, m.period);
+          }
+
+          m.period++;
+          m.timer = m.duration;
+        }
+      });
+      updateUI();
+    }, 1000);
+
+    function triggerWinLossPopup(type, resultData, winAmount, marketName, periodId) {
+      if (type === 'win') {
+        document.getElementById('winTagColor').innerText = resultData.color;
+        document.getElementById('winTagNum').innerText = resultData.number;
+        document.getElementById('winTagBS').innerText = resultData.size;
+        document.getElementById('winAmountVal').innerText = winAmount.toFixed(2);
+        document.getElementById('winPeriodName').innerText = marketName;
+        document.getElementById('winPeriodId').innerText = periodId;
+
+        document.getElementById('winPopup').classList.add('active');
+        autoClosePopup('winPopup');
+      } else if (type === 'loss') {
+        document.getElementById('lossTagColor').innerText = resultData.color;
+        document.getElementById('lossTagNum').innerText = resultData.number;
+        document.getElementById('lossTagBS').innerText = resultData.size;
+        document.getElementById('lossPeriodName').innerText = marketName;
+        document.getElementById('lossPeriodId').innerText = periodId;
+
+        document.getElementById('lossPopup').classList.add('active');
+        autoClosePopup('lossPopup');
+      }
+    }
+
+    function autoClosePopup(id) {
+      if (winLossTimeout) clearTimeout(winLossTimeout);
+      winLossTimeout = setTimeout(() => {
+        closePopup(id);
+      }, 3000);
+    }
+
+    function closePopup(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+
+    function updateUI() {
+      const currentData = markets[activeMarket];
+      let mins = Math.floor(currentData.timer / 60);
+      let secs = currentData.timer % 60;
+      
+      document.getElementById('user-balance').innerText = userBalance.toFixed(2);
+      document.getElementById('timer-display').innerText = `${mins < 10 ? '0':''}${mins}:${secs < 10 ? '0':''}${secs}`;
+      document.getElementById('period-id').innerText = currentData.period;
+
+      const betLockOverlay = document.getElementById('betLockOverlay');
+      if (currentData.timer <= 5) {
+        betLockOverlay.classList.remove('hidden');
+        document.getElementById('lockSecDigit').innerText = currentData.timer;
+        closeBetModal();
+      } else {
+        betLockOverlay.classList.add('hidden');
+      }
+
+      const ballsContainer = document.getElementById('recent-balls');
+      ballsContainer.innerHTML = '';
+      currentData.history.slice(0, 5).forEach(item => {
+        let ball = document.createElement('div');
+        ball.className = `ball-sm ${getSelectionColorClass(item.color === 'Red-Violet' ? 0 : (item.color === 'Green-Violet' ? 5 : item.color))}`;
+        ball.innerText = item.number;
+        ballsContainer.appendChild(ball);
+      });
+
+      const currentPage = paginationState[activeHistoryTab].current;
+      const startIndex = (currentPage - 1) * PAGE_SIZE;
+      const endIndex = startIndex + PAGE_SIZE;
+
+      if (activeHistoryTab === 'game') {
+        renderGameHistory(currentData.history.slice(startIndex, endIndex));
+      } else if (activeHistoryTab === 'chart') {
+        renderChartHistory(currentData.history.slice(startIndex, endIndex));
+      } else if (activeHistoryTab === 'my') {
+        paginationState.my.total = Math.max(1, Math.ceil(currentData.myBets.length / PAGE_SIZE));
+        updatePaginationUI();
+        renderMyHistory(currentData.myBets.slice(startIndex, endIndex));
+      }
+    }
+
+    function renderGameHistory(history) {
+      const body = document.getElementById('game-history-body');
+      body.innerHTML = '';
+      history.forEach(row => {
+        let tr = document.createElement('tr');
+        let dotsHTML = '';
+        if(row.color === 'Red-Violet') dotsHTML = `<span class="dot bg-red"></span><span class="dot bg-violet"></span>`;
+        else if(row.color === 'Green-Violet') dotsHTML = `<span class="dot bg-green"></span><span class="dot bg-violet"></span>`;
+        else if(row.color === 'Red') dotsHTML = `<span class="dot bg-red"></span>`;
+        else dotsHTML = `<span class="dot bg-green"></span>`;
+
+        tr.innerHTML = `
+          <td>${row.period}</td>
+          <td style="font-weight: bold; font-size: 15px; color: ${getNumberColor(row.number)}">${row.number}</td>
+          <td style="font-weight: 500;">${row.size}</td>
+          <td>${dotsHTML}</td>
+        `;
+        body.appendChild(tr);
+      });
+    }
+
+    function renderChartHistory(history) {
+      const body = document.getElementById('chart-history-body');
+      body.innerHTML = '';
+
+      history.forEach((row, idx) => {
+        let tr = document.createElement('tr');
+        let numbersHTML = '<div style="display: flex; justify-content: space-around; align-items: center;">';
+
+        for(let i = 0; i <= 9; i++) {
+          if(i === row.number) {
+            numbersHTML += `<span id="chart-ball-${idx}" class="num-ball-chart ${getSelectionColorClass(i)}">${i}</span>`;
+          } else {
+            numbersHTML += `<span style="color:#6b21a8; font-size:11px; width: 18px; text-align: center;">${i}</span>`;
+          }
+        }
+        numbersHTML += `<span class="bs-badge ${row.size === 'Big' ? 'badge-b' : 'badge-s'}">${row.size === 'Big' ? 'B' : 'S'}</span></div>`;
+
+        tr.innerHTML = `<td>${row.period}</td><td>${numbersHTML}</td>`;
+        body.appendChild(tr);
+      });
+
+      setTimeout(() => {
+        const canvas = document.getElementById('chart-canvas');
+        const container = document.getElementById('view-chart-history');
+        if(!container) return;
+        canvas.width = container.clientWidth;
+        canvas.height = container.clientHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        let points = [];
+        history.forEach((_, idx) => {
+          let ball = document.getElementById(`chart-ball-${idx}`);
+          if(ball) {
+            let rect = ball.getBoundingClientRect();
+            let parentRect = container.getBoundingClientRect();
+            points.push({
+              x: rect.left - parentRect.left + rect.width / 2,
+              y: rect.top - parentRect.top + rect.height / 2
+            });
+          }
+        });
+
+        if(points.length > 1) {
+          ctx.beginPath();
+          ctx.strokeStyle = '#ef4444';
+          ctx.lineWidth = 1.5;
+          ctx.moveTo(points[0].x, points[0].y);
+          for(let p = 1; p < points.length; p++) {
+            ctx.lineTo(points[p].x, points[p].y);
+          }
+          ctx.stroke();
+        }
+      }, 50);
+    }
+
+    function toggleCardDetail(index) {
+      expandedCardIndex = expandedCardIndex === index ? null : index;
+      updateUI();
+    }
+
+    function renderMyHistory(myBets) {
+      const container = document.getElementById('my-history-container');
+      container.innerHTML = '';
+
+      if(!myBets || myBets.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 40px 20px; color: #a855f7;">
+            <div style="font-size: 40px; margin-bottom: 10px;">📋</div>
+            <div style="font-size: 14px; font-weight: bold;">No Bet History Found</div>
+            <div style="font-size: 12px; margin-top: 5px; color: #c084fc;">Select options above and place your bets!</div>
+          </div>`;
+        return;
+      }
+
+      myBets.forEach((row, idx) => {
+        let isSuccess = row.status === 'Succeed';
+        let isPending = row.status === 'Pending';
+        let colorClass = getSelectionColorClass(row.select);
+        let isExpanded = expandedCardIndex === idx;
+
+        let amountDisplay = isPending ? `-৳${row.amount.toFixed(2)}` : (isSuccess ? `+৳${row.winAmount.toFixed(2)}` : `-৳${row.amount.toFixed(2)}`);
+        let amountColor = isPending ? '#d97706' : (isSuccess ? '#10b981' : '#ef4444');
+
+        let card = document.createElement('div');
+        card.className = 'my-history-card';
+        
+        card.innerHTML = `
+          <div class="my-history-header" onclick="toggleCardDetail(${idx})" style="cursor: pointer;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div class="selection-badge ${colorClass}">${row.select}</div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #1f2937;">${row.period} <span style="font-size: 10px;">${isExpanded ? '▲' : '▼'}</span></div>
+                <div style="font-size: 11px; color: #9ca3af; margin-top: 2px;">${row.time}</div>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <span class="status-pill ${row.status.toLowerCase()}">${row.status}</span>
+              <div style="font-size: 14px; font-weight: 800; color: ${amountColor}; margin-top: 4px;">${amountDisplay}</div>
+            </div>
+          </div>
+
+          ${isExpanded ? `
+            <div class="my-history-details">
+              <div style="font-weight: 700; color: #374151; margin-bottom: 8px;">Details</div>
+              <div class="detail-row"><span>Order number</span><span>${row.orderNo}</span></div>
+              <div class="detail-row"><span>Period</span><span>${row.period}</span></div>
+              <div class="detail-row"><span>Purchase amount</span><span>৳${row.amount.toFixed(2)}</span></div>
+              <div class="detail-row"><span>Quantity</span><span>${row.qty}</span></div>
+              <div class="detail-row"><span>Amount after tax</span><span>৳${row.taxAmount.toFixed(2)}</span></div>
+              <div class="detail-row"><span>Tax</span><span>৳${row.tax.toFixed(2)}</span></div>
+              <div class="detail-row"><span>Result</span><span>${row.resultNumber !== undefined ? `${row.resultNumber} <span style="color:${row.resultColor.includes('Green')?'#10b981':'#ef4444'}">${row.resultColor}</span> ${row.resultSize}` : 'Waiting'}</span></div>
+              <div class="detail-row"><span>Select</span><span>${row.select}</span></div>
+              <div class="detail-row"><span>Status</span><span style="color:${amountColor}">${row.status}</span></div>
+              <div class="detail-row"><span>Win/lose</span><span style="color:${amountColor}">${amountDisplay}</span></div>
+              <div class="detail-row"><span>Order time</span><span>${row.time}</span></div>
+            </div>
+          ` : ''}
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    function openBetModal(selection) {
+      if (markets[activeMarket].timer <= 5) return;
+
+      currentSelection = selection;
+      baseBalance = 1;
+      currentQty = 1;
+      currentMultiplier = 1;
+
+      document.getElementById('customAmountInput').value = '';
+      document.getElementById('modal-market-name').innerText = markets[activeMarket].name;
+      document.getElementById('modal-select-val').innerText = selection;
+
+      activeThemeColor = getThemeColor(selection);
+      
+      document.getElementById('modal-header-bg').style.background = activeThemeColor;
+      document.getElementById('modal-select-val').style.color = (typeof selection === 'number' || (typeof selection === 'string' && selection.includes('Red'))) ? '#dc2626' : (selection === 'Green' ? '#059669' : (selection === 'Violet' ? '#8b5cf6' : (selection === 'Big' ? '#d97706' : '#3b82f6')));
+      document.getElementById('modal-submit-btn').style.background = activeThemeColor;
+      document.getElementById('qty-btn-minus').style.background = activeThemeColor;
+      document.getElementById('qty-btn-plus').style.background = activeThemeColor;
+
+      resetModalButtons();
+      calculateTotal();
+      document.getElementById('bet-modal-overlay').classList.add('active');
+    }
+
+    function closeBetModal() {
+      document.getElementById('bet-modal-overlay').classList.remove('active');
+    }
+
+    function closeBetModalOnBlank(event) {
+      if (event.target.id === 'bet-modal-overlay') {
+        closeBetModal();
+      }
+    }
+
+    function setBaseBalance(val) {
+      baseBalance = val;
+      document.getElementById('customAmountInput').value = '';
+      document.querySelectorAll('.b-base').forEach(btn => {
+        let isActive = parseInt(btn.innerText) === val;
+        btn.classList.toggle('active', isActive);
+        btn.style.background = isActive ? activeThemeColor : '#f9fafb';
+        btn.style.borderColor = isActive ? activeThemeColor : '#e5e7eb';
+      });
+      calculateTotal();
+    }
+
+    function onCustomAmountChange() {
+      let val = parseFloat(document.getElementById('customAmountInput').value);
+      if (!isNaN(val) && val > 0) {
+        baseBalance = val;
+        document.querySelectorAll('.b-base').forEach(btn => {
+          btn.classList.remove('active');
+          btn.style.background = '#f9fafb';
+          btn.style.borderColor = '#e5e7eb';
+        });
+      } else {
+        baseBalance = 1;
+      }
+      calculateTotal();
+    }
+
+    function setMultiplier(val) {
+      currentMultiplier = val;
+      document.querySelectorAll('.b-mult').forEach(btn => {
+        let isActive = btn.innerText === `X${val}`;
+        btn.classList.toggle('active', isActive);
+        btn.style.background = isActive ? activeThemeColor : '#f9fafb';
+        btn.style.borderColor = isActive ? activeThemeColor : '#e5e7eb';
+      });
+      calculateTotal();
+    }
+
+    function updateQty(change) {
+      currentQty = Math.max(1, currentQty + change);
+      document.getElementById('modal-qty').value = currentQty;
+      calculateTotal();
+    }
+
+    function calculateTotal() {
+      let total = baseBalance * currentQty * currentMultiplier;
+      document.getElementById('modal-total-amount').innerText = total.toFixed(2);
+    }
+
+    function resetModalButtons() {
+      document.querySelectorAll('.b-base').forEach((btn, idx) => {
+        let isActive = idx === 0;
+        btn.classList.toggle('active', isActive);
+        btn.style.background = isActive ? activeThemeColor : '#f9fafb';
+        btn.style.borderColor = isActive ? activeThemeColor : '#e5e7eb';
+      });
+      document.querySelectorAll('.b-mult').forEach((btn, idx) => {
+        let isActive = idx === 0;
+        btn.classList.toggle('active', isActive);
+        btn.style.background = isActive ? activeThemeColor : '#f9fafb';
+        btn.style.borderColor = isActive ? activeThemeColor : '#e5e7eb';
+      });
+      document.getElementById('modal-qty').value = 1;
+    }
+
+    function showSuccessModal() {
+      const modal = document.getElementById('success-modal');
+      document.getElementById('success-msg').innerText = `Placed ${currentSelection} (৳${(baseBalance * currentQty * currentMultiplier).toFixed(2)}) on ${markets[activeMarket].name}`;
+      modal.classList.add('active');
+      setTimeout(() => {
+        modal.classList.remove('active');
+      }, 1800);
+    }
+
+    function submitBet() {
+      let totalAmount = baseBalance * currentQty * currentMultiplier;
+      if (userBalance < totalAmount) {
+        alert('Insufficient wallet balance!');
+        return;
+      }
+
+      userBalance -= totalAmount;
+      let now = new Date();
+      let timeStr = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2,'0')}-${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
+      let orderNo = 'WG' + now.getFullYear() + (now.getMonth()+1).toString().padStart(2,'0') + now.getDate().toString().padStart(2,'0') + Math.floor(Math.random()*1000000000);
+
+      let tax = totalAmount * 0.02;
+      let taxAmount = totalAmount - tax;
+
+      markets[activeMarket].myBets.unshift({
+        orderNo: orderNo,
+        period: markets[activeMarket].period,
+        select: currentSelection,
+        amount: totalAmount,
+        qty: currentQty * currentMultiplier,
+        tax: tax,
+        taxAmount: taxAmount,
+        status: 'Pending',
+        winAmount: 0,
+        time: timeStr
+      });
+
+      closeBetModal();
+      updateUI();
+      showSuccessModal();
+    }
+
+    function getNumberColor(num) {
+      if(num === 0 || num === 5) return '#c084fc';
+      return num % 2 === 0 ? '#ef4444' : '#10b981';
+    }
+
+    updatePaginationUI();
+    updateUI();
+    // wingo.html script
+let activeMarket = "1m"; // User active market
+
+// Real-time listener for result update
+db.collection('markets').doc(activeMarket)
+  .onSnapshot((doc) => {
+    let data = doc.data();
+    
+    // UI Update logic
+    document.getElementById('period_id').innerText = data.current_period;
+    
+    // Timer শেষ হলে রেজাল্ট দেখানোর লজিক
+    if (data.next_result) {
+      console.log("Upcoming Result:", data.next_result);
+      // Winner calculation UI code ekhane hobe
+    }
+});
+  </script>
+</body>
+</html>

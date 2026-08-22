@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DK WIN - Ultimate Master Admin</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+    body { background: #0f172a; color: #f8fafc; padding: 20px; max-width: 1100px; margin: 0 auto; }
+    h2 { color: #f3c623; margin-bottom: 20px; text-align: center; font-size: 24px; }
+    
+    .section-card { background: #1e293b; border-radius: 12px; padding: 20px; margin-bottom: 25px; border: 1px solid #334155; }
+    .section-card h3 { color: #38bdf8; margin-bottom: 15px; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+    
+    /* Login Modal */
+    #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0f172a; display: flex; justify-content: center; align-items: center; z-index: 999; }
+    .login-box { background: #1e293b; padding: 30px; border-radius: 12px; border: 1px solid #334155; text-align: center; width: 300px; }
+    
+    /* Stats Dashboard */
+    .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 10px; }
+    .stat-card { background: #0f172a; border: 1px solid #334155; padding: 15px; border-radius: 10px; text-align: center; }
+    .stat-card h4 { color: #94a3b8; font-size: 12px; }
+    .stat-card h3 { color: #10b981; font-size: 20px; justify-content: center; margin-top: 5px; }
+
+    /* Tables & Inputs */
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #334155; font-size: 13px; }
+    th { background: #0f172a; color: #94a3b8; }
+    
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; }
+    .signal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+    .signal-box { background: #0f172a; padding: 15px; border-radius: 10px; border: 1px solid #334155; text-align: center; }
+    .signal-box h4 { color: #f3c623; margin-bottom: 10px; }
+    .input-field, select { width: 100%; padding: 8px 12px; border-radius: 6px; outline: none; background: #0f172a; color: #fff; border: 1px solid #475569; margin-top: 5px; }
+    
+    /* Switch */
+    .switch-container { display: flex; align-items: center; justify-content: space-between; background: #0f172a; padding: 12px; border-radius: 8px; border: 1px solid #334155; }
+    .switch { position: relative; display: inline-block; width: 46px; height: 24px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top:0; left:0; right:0; bottom:0; background-color: #475569; transition: .4s; border-radius: 24px; }
+    .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+    input:checked + .slider { background-color: #10b981; }
+    input:checked + .slider:before { transform: translateX(22px); }
+
+    /* Buttons */
+    .btn { padding: 8px 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px; margin-top: 5px; }
+    .btn-block { background: #ef4444; color: #fff; }
+    .btn-unblock { background: #10b981; color: #fff; }
+    .btn-approve { background: #10b981; color: #fff; }
+    .btn-reject { background: #ef4444; color: #fff; }
+    .btn-signal { background: #f3c623; color: #000; }
+    .btn-action { background: #38bdf8; color: #000; }
+    
+    .badge-pending { background: #f59e0b; color: #000; padding: 3px 8px; border-radius: 10px; font-size: 11px; }
+    .badge-complete { background: #10b981; color: #fff; padding: 3px 8px; border-radius: 10px; font-size: 11px; }
+    .badge-blocked { background: #ef4444; color: #fff; padding: 3px 8px; border-radius: 10px; font-size: 11px; }
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDEndkTBhWD2Lo4ePYHQ9Lz-Fec4KS1E78",
+    projectId: "joly444-f4b83",
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
+</head>
+<body>
+
+  <!-- ADMIN LOGIN LOCK -->
+  <div id="login-overlay">
+    <div class="login-box">
+      <h3 style="color:#f3c623; margin-bottom: 15px;"><i class="fa-solid fa-lock"></i> Admin Access</h3>
+      <input type="password" id="admin-pass" class="input-field" placeholder="পাসওয়ার্ড দিন">
+      <button class="btn btn-action" style="width:100%; margin-top:15px;" onclick="checkAdminPass()">Login</button>
+    </div>
+  </div>
+
+  <h2><i class="fa-solid fa-user-shield"></i> DK WIN Master Control</h2>
+
+  <!-- FINANCIAL DASHBOARD -->
+  <div class="section-card">
+    <h3><i class="fa-solid fa-chart-pie"></i> Business Overview</h3>
+    <div class="dash-grid">
+      <div class="stat-card">
+        <h4>Total Deposit</h4>
+        <h3 id="stat-deposit">৳0.00</h3>
+      </div>
+      <div class="stat-card">
+        <h4>Total Withdraw</h4>
+        <h3 id="stat-withdraw" style="color:#ef4444;">৳0.00</h3>
+      </div>
+      <div class="stat-card">
+        <h4>Net Profit</h4>
+        <h3 id="stat-profit" style="color:#38bdf8;">৳0.00</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- APP SYSTEM & SUPPORT LINKS -->
+  <div class="section-card">
+    <h3><i class="fa-solid fa-gears"></i> App Settings & Support Links</h3>
+    <div class="grid-2">
+      <div>
+        <label>Telegram Group Link</label>
+        <input type="text" id="tg-link" class="input-field" placeholder="Telegram Link">
+      </div>
+      <div>
+        <label>Welcome Bonus (৳)</label>
+        <input type="number" id="welcome-bonus" class="input-field" placeholder="Bonus Amount">
+      </div>
+    </div>
+    <button class="btn btn-action" style="margin-top:10px;" onclick="saveAppSettings()">Save App Settings</button>
+  </div>
+
+  <!-- PAYMENT GATEWAY SETUP -->
+  <div class="section-card">
+    <h3><i class="fa-solid fa-wallet"></i> Payment Gateway Setup</h3>
+    <div class="grid-2">
+      <div>
+        <label>Bkash Number</label>
+        <input type="text" id="bkash-num" class="input-field" placeholder="bKash Number">
+      </div>
+      <div>
+        <label>Nagad Number</label>
+        <input type="text" id="nagad-num" class="input-field" placeholder="Nagad Number">
+      </div>
+    </div>
+    <button class="btn btn-action" style="margin-top:10px;" onclick="saveGateways()">Save Gateway Info</button>
+  </div>
+
+  <!-- MANUAL BALANCE & AUTO PROFIT -->
+  <div class="section-card">
+    <h3><i class="fa-solid fa-sliders"></i> System Risk & Balance Control</h3>
+    <div class="switch-container" style="margin-bottom: 15px;">
+      <div>
+        <strong>Auto Profit Mode (Always House Win)</strong>
+        <p style="font-size: 11px; color: #94a3b8;">সিস্টেম নিজে থেকে হিসাব করে কম বাজি ধরা কালার/নম্বরে উইন দেবে।</p>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="auto-profit-toggle" onchange="toggleAutoProfit(this.checked)">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <!-- Balance Adjustment -->
+    <div class="grid-2">
+      <input type="text" id="adj-phone" class="input-field" placeholder="User Phone">
+      <input type="number" id="adj-amount" class="input-field" placeholder="Amount (৳)">
+      <select id="adj-type" class="input-field">
+        <option value="add">Add (+)</option>
+        <option value="subtract">Subtract (-)</option>
+      </select>
+      <button class="btn btn-action" onclick="adjustBalance()">Update Balance</button>
+    </div>
+  </div>
+
+  <!-- LIVE BETS MONITOR -->
+  <div class="section-card">
+    <h3><i class="fa-solid fa-chart-line"></i> Live Bets Monitor</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>User</th>
+          <th>Mode</th>
+          <th>Choice</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody id="live-bets-body">
+        <tr><td colspan="4">No active bets...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FAKE WINNING BROADCAST -->
+  <div class="section-card">
+    <h3><i class="fa-solid fa-bullhorn"></i> Fake Winning Broadcast</h3>
+    <div class="grid-2">
+      <input type="text" id="fake-phone" class="input-field" placeholder="Phone (e.g. 017****1234)">
+      <input type="number" id="fake-amount" class="input-field" placeholder="Amount (৳)">
+    </div>
+    <button class="btn btn-action" style="margin-top:10px;" onclick="sendFakeWinning()">Broadcast Win</button>
+  </div>
+
+  <!-- USER MANAGEMENT -->
+  <div class="section-card">
+    <h3><i class="fa-solid fa-users"></i> Registered Users</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name / Phone</th>
+          <th>Balance</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="user-table-body">
+        <tr><td colspan="4">Loading Users...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- GAME SIGNAL CONTROL -->
+  <div class="section-card">
+    <h3><i class="fa-solid fa-gears"></i> Manual Game Signals</h3>
+    <div class="signal-grid">
+      <div class="signal-box">
+        <h4>Win Go 30s</h4>
+        <select id="signal-30s">
+          <option value="auto">Auto</option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option>
+        </select>
+        <button class="btn btn-signal" onclick="setSignal('30s')">Set Result</button>
+      </div>
+      <div class="signal-box">
+        <h4>Win Go 1m</h4>
+        <select id="signal-1m">
+          <option value="auto">Auto</option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option>
+        </select>
+        <button class="btn btn-signal" onclick="setSignal('1m')">Set Result</button>
+      </div>
+      <div class="signal-box">
+        <h4>Win Go 3m</h4>
+        <select id="signal-3m">
+          <option value="auto">Auto</option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option>
+        </select>
+        <button class="btn btn-signal" onclick="setSignal('3m')">Set Result</button>
+      </div>
+      <div class="signal-box">
+        <h4>Win Go 5m</h4>
+        <select id="signal-5m">
+          <option value="auto">Auto</option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option>
+        </select>
+        <button class="btn btn-signal" onclick="setSignal('5m')">Set Result</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEPOSIT & WITHDRAW REQUESTS -->
+  <div class="section-card">
+    <h3><i class="fa-solid fa-money-bill-transfer"></i> Deposit & Withdraw Requests</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>User</th>
+          <th>Type</th>
+          <th>Amount</th>
+          <th>Details</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="request-table-body">
+        <tr><td colspan="6">Loading Requests...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, doc, updateDoc, setDoc, getDoc, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDEndkTBhWD2Lo4ePYHQ9Lz-Fec4KS1E78",
+      authDomain: "joly444-f4b83.firebaseapp.com",
+      projectId: "joly444-f4b83",
+      storageBucket: "joly444-f4b83.firebasestorage.app",
+      messagingSenderId: "176580504004",
+      appId: "1:176580504004:web:8d8b358b4cc079f9501c91"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Password Check
+    window.checkAdminPass = () => {
+      const p = document.getElementById("admin-pass").value;
+      if(p === "1") {
+        document.getElementById("login-overlay").style.display = "none";
+      } else { alert("ভুল পাসওয়ার্ড!"); }
+    };
+
+    // Helper: Find User Doc Reference by Phone or ID
+    async function getUserRef(phoneOrId) {
+      const directRef = doc(db, "users", phoneOrId);
+      const directSnap = await getDoc(directRef);
+      if (directSnap.exists()) return directRef;
+
+      const q = query(collection(db, "users"), where("phone", "==", phoneOrId));
+      const querySnap = await getDocs(q);
+      if (!querySnap.empty) {
+        return doc(db, "users", querySnap.docs[0].id);
+      }
+      return null;
+    }
+
+    // Load Settings
+    getDoc(doc(db, "settings", "app_config")).then(snap => {
+      if(snap.exists()) {
+        document.getElementById("tg-link").value = snap.data().tgLink || "";
+        document.getElementById("welcome-bonus").value = snap.data().bonus || 0;
+      }
+    });
+
+    getDoc(doc(db, "settings", "gateways")).then(snap => {
+      if(snap.exists()) {
+        document.getElementById("bkash-num").value = snap.data().bkash || "";
+        document.getElementById("nagad-num").value = snap.data().nagad || "";
+      }
+    });
+
+    getDoc(doc(db, "settings", "risk_control")).then(snap => {
+      if(snap.exists()) document.getElementById("auto-profit-toggle").checked = snap.data().autoProfit || false;
+    });
+
+    // Save App Settings
+    window.saveAppSettings = async () => {
+      await setDoc(doc(db, "settings", "app_config"), {
+        tgLink: document.getElementById("tg-link").value,
+        bonus: parseFloat(document.getElementById("welcome-bonus").value) || 0
+      }, { merge: true });
+      alert("App Settings Saved!");
+    };
+
+    // Save Gateways
+    window.saveGateways = async () => {
+      await setDoc(doc(db, "settings", "gateways"), {
+        bkash: document.getElementById("bkash-num").value,
+        nagad: document.getElementById("nagad-num").value
+      }, { merge: true });
+      alert("Gateways Saved!");
+    };
+
+    // Auto Profit Toggle
+    window.toggleAutoProfit = async (s) => {
+      await setDoc(doc(db, "settings", "risk_control"), { autoProfit: s }, { merge: true });
+    };
+
+    // Manual Balance Adjust
+    window.adjustBalance = async () => {
+      const phone = document.getElementById("adj-phone").value.trim();
+      const amt = parseFloat(document.getElementById("adj-amount").value);
+      const type = document.getElementById("adj-type").value;
+      if(!phone || isNaN(amt)) return alert("সঠিক তথ্য দিন!");
+
+      const uRef = await getUserRef(phone);
+      if(uRef) {
+        const snap = await getDoc(uRef);
+        let cur = parseFloat(snap.data().balance || 0);
+        let newBal = type === 'add' ? cur + amt : cur - amt;
+        await updateDoc(uRef, { balance: newBal });
+        alert("ব্যালেন্স আপডেট সফল!");
+      } else { alert("ইউজার পাওয়া যায়নি!"); }
+    };
+
+    // Live Bets Monitor
+    onSnapshot(collection(db, "active_bets"), (snapshot) => {
+      let html = "";
+      snapshot.forEach(d => {
+        const b = d.data();
+        html += `<tr><td>${b.user || b.phone}</td><td>${b.mode}</td><td>${b.choice}</td><td>৳${b.amount}</td></tr>`;
+      });
+      document.getElementById("live-bets-body").innerHTML = html || "<tr><td colspan='4'>No active bets...</td></tr>";
+    });
+
+    // Fake Broadcast
+    window.sendFakeWinning = async () => {
+      const p = document.getElementById("fake-phone").value;
+      const a = document.getElementById("fake-amount").value;
+      if(p && a) {
+        await addDoc(collection(db, "broadcasts"), { phone: p, amount: a, timestamp: Date.now() });
+        alert("Broadcast Sent!");
+      }
+    };
+
+    // Users List Dynamic Sync
+    onSnapshot(collection(db, "users"), (snapshot) => {
+      let html = "";
+      snapshot.forEach((docSnap) => {
+        const u = docSnap.data();
+        const displayUser = u.phone || u.name || docSnap.id;
+        const isBlocked = u.isBlocked || false;
+        html += `
+          <tr>
+            <td>${displayUser}</td>
+            <td>৳${parseFloat(u.balance || 0).toFixed(2)}</td>
+            <td>${isBlocked ? '<span class="badge-blocked">Blocked</span>' : '<span class="badge-complete">Active</span>'}</td>
+            <td>
+              <button class="btn ${isBlocked ? 'btn-unblock' : 'btn-block'}" onclick="toggleBlock('${docSnap.id}', ${isBlocked})">${isBlocked ? 'Unblock' : 'Block'}</button>
+            </td>
+          </tr>`;
+      });
+      document.getElementById("user-table-body").innerHTML = html || "<tr><td colspan='4'>No users found</td></tr>";
+    });
+
+    window.toggleBlock = async (docId, status) => { 
+      await updateDoc(doc(db, "users", docId), { isBlocked: !status }); 
+    };
+
+    // Set Signals
+    window.setSignal = async (mode) => {
+      const val = document.getElementById(`signal-${mode}`).value;
+      await setDoc(doc(db, "game_signals", mode), { overrideResult: val }, { merge: true });
+      alert(`Signal Saved for ${mode}!`);
+    };
+
+    // Handle Requests & Dashboard Calculator
+    onSnapshot(collection(db, "requests"), (snapshot) => {
+      let html = "";
+      let totalDep = 0;
+      let totalWith = 0;
+
+      snapshot.forEach((docSnap) => {
+        const req = docSnap.data();
+        const amt = parseFloat(req.amount || 0);
+
+        if(req.status === 'completed') {
+          if(req.type === 'deposit') totalDep += amt;
+          if(req.type === 'withdraw') totalWith += amt;
+        }
+
+        if(req.status === 'pending') {
+          html += `
+            <tr>
+              <td>${req.userPhone || req.user}</td>
+              <td><b>${(req.type || '').toUpperCase()}</b></td>
+              <td>৳${amt}</td>
+              <td>${req.details || req.trxId || 'N/A'}</td>
+              <td><span class="badge-pending">Pending</span></td>
+              <td>
+                <button class="btn btn-approve" onclick="handleRequest('${docSnap.id}', '${req.userPhone || req.user}', '${req.type}', ${amt}, 'completed')">Approve</button>
+                <button class="btn btn-reject" onclick="handleRequest('${docSnap.id}', '${req.userPhone || req.user}', '${req.type}', ${amt}, 'rejected')">Reject</button>
+              </td>
+            </tr>`;
+        }
+      });
+
+      document.getElementById("stat-deposit").innerText = `৳${totalDep.toFixed(2)}`;
+      document.getElementById("stat-withdraw").innerText = `৳${totalWith.toFixed(2)}`;
+      document.getElementById("stat-profit").innerText = `৳${(totalDep - totalWith).toFixed(2)}`;
+
+      document.getElementById("request-table-body").innerHTML = html || "<tr><td colspan='6'>No pending requests</td></tr>";
+    });
+
+    window.handleRequest = async (reqId, userPhone, type, amount, newStatus) => {
+      const userRef = await getUserRef(userPhone);
+      
+      if(userRef) {
+        const uSnap = await getDoc(userRef);
+        const currentBal = parseFloat(uSnap.data().balance || 0);
+
+        if(newStatus === 'completed' && type === 'deposit') {
+          await updateDoc(userRef, { balance: currentBal + amount });
+        } else if(newStatus === 'rejected' && type === 'withdraw') {
+          await updateDoc(userRef, { balance: currentBal + amount });
+        }
+      }
+
+      await updateDoc(doc(db, "requests", reqId), { status: newStatus });
+      alert(`Request ${newStatus}!`);
+    }; 
+  </script>
+</body>
+</html>

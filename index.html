@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DK WIN - Premium UI</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+    
+    :root {
+      --bg-dark: #12092b;
+      --card-bg: #211242;
+      --card-inner: #2d1854;
+      --purple-light: #a78bfa;
+      --purple-border: rgba(167, 139, 250, 0.2);
+      --gold: #f3c623;
+      --gold-dark: #ca8a04;
+      --text-light: #f3e8ff;
+      --text-muted: #94a3b8;
+    }
+
+    body { 
+      background-color: var(--bg-dark); 
+      color: var(--text-light); 
+      max-width: 480px; 
+      margin: 0 auto; 
+      padding-bottom: 80px; 
+      position: relative; 
+      min-height: 100vh; 
+    }
+
+    .top-bar { 
+      background: var(--card-bg); 
+      padding: 12px 15px; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      position: sticky; 
+      top: 0; 
+      z-index: 100; 
+      border-bottom: 1px solid var(--purple-border); 
+    }
+    .logo { font-size: 22px; font-weight: 900; color: var(--gold); font-style: italic; letter-spacing: -1px; }
+    .top-icons { display: flex; gap: 15px; font-size: 18px; color: var(--gold); }
+
+    .page-view { display: none; }
+    .page-view.active { display: block; }
+
+    /* Auth Pages Styling */
+    .auth-container {
+      padding: 30px 20px;
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .auth-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .auth-header h2 {
+      font-size: 26px;
+      color: var(--gold);
+      margin-top: 10px;
+    }
+    .auth-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 5px;
+    }
+    .auth-form {
+      background: var(--card-bg);
+      border: 1px solid var(--purple-border);
+      border-radius: 16px;
+      padding: 25px 20px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    }
+    .input-group {
+      margin-bottom: 18px;
+    }
+    .input-group label {
+      display: block;
+      font-size: 12px;
+      color: var(--purple-light);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .input-box {
+      width: 100%;
+      background: var(--card-inner);
+      border: 1px solid var(--purple-border);
+      border-radius: 10px;
+      padding: 12px 15px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .input-box:focus {
+      border-color: var(--gold);
+    }
+    .auth-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      border: none;
+      padding: 14px;
+      border-radius: 25px;
+      font-weight: bold;
+      color: #000;
+      font-size: 15px;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 4px 15px rgba(243, 198, 35, 0.3);
+    }
+    .auth-switch {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .auth-switch span {
+      color: var(--gold);
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .banner { 
+      width: 100%; 
+      height: 150px; 
+      background: linear-gradient(135deg, #4c1d95, #7c3aed); 
+      border-radius: 16px; 
+      margin: 12px 0; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: center; 
+      color: var(--gold); 
+      text-align: center; 
+      border: 1px solid var(--purple-light); 
+      box-shadow: 0 4px 20px rgba(124, 58, 237, 0.3); 
+    }
+    .banner h2 { font-size: 22px; text-transform: uppercase; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+    .banner p { font-size: 12px; color: #fff; margin-top: 4px; }
+
+    .marquee { 
+      background: var(--card-bg); 
+      padding: 8px 12px; 
+      border-radius: 20px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      font-size: 12px; 
+      color: var(--text-muted); 
+      margin-bottom: 15px; 
+      border: 1px solid var(--purple-border); 
+    }
+
+    .section-title { font-size: 14px; color: var(--gold); margin: 15px 0 10px 0; display: flex; align-items: center; gap: 6px; }
+    .game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
+    
+    .game-card { 
+      background: var(--card-bg); 
+      border-radius: 14px; 
+      padding: 18px; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: center; 
+      cursor: pointer; 
+      border: 1px solid var(--purple-border); 
+      position: relative; 
+      overflow: hidden; 
+      text-decoration: none;
+    }
+    .game-card.featured { 
+      grid-column: span 2; 
+      background: linear-gradient(135deg, #2e1065, #581c87); 
+      border: 1px solid var(--purple-light); 
+      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4); 
+    }
+    .game-card i { font-size: 32px; color: var(--gold); margin-bottom: 8px; }
+    .game-card h3 { font-size: 16px; color: #fff; }
+    .game-card p { font-size: 11px; color: var(--purple-light); margin-top: 2px; }
+    .badge { position: absolute; top: 8px; right: 8px; background: #ef4444; color: white; font-size: 9px; padding: 2px 6px; border-radius: 8px; font-weight: bold; }
+
+    .act-header-purple { 
+      background: linear-gradient(180deg, #2e1065 0%, #1e0a45 100%); 
+      padding: 20px 15px; 
+      text-align: center; 
+      border-bottom: 1px solid var(--purple-border);
+    }
+    
+    .bonus-summary { 
+      display: flex; 
+      justify-content: space-around; 
+      background: var(--card-bg); 
+      border-radius: 14px; 
+      padding: 15px; 
+      margin-top: 10px; 
+      border: 1px solid var(--purple-border);
+    }
+    .bonus-box p { font-size: 11px; color: var(--purple-light); font-weight: 500; }
+    .bonus-box h3 { font-size: 20px; color: var(--gold); font-weight: 800; margin-top: 2px; }
+    .bonus-divider { width: 1px; background: var(--purple-border); }
+
+    .act-icon-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 15px; }
+    .act-icon-item { display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; }
+    .icon-box { 
+      width: 52px; height: 52px; border-radius: 16px; background: var(--card-bg); border: 1px solid var(--purple-light); display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--gold); margin-bottom: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); 
+    }
+    .act-icon-item span { font-size: 11px; color: var(--text-light); font-weight: 500; }
+
+    .act-cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 15px 15px 15px; }
+    .grid-card { background: var(--card-bg); border: 1px solid var(--purple-border); border-radius: 14px; padding: 15px; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; min-height: 110px; }
+    .grid-card h4 { font-size: 14px; color: var(--gold); font-weight: bold; margin-bottom: 4px; }
+    .grid-card p { font-size: 11px; color: var(--text-muted); }
+
+    .long-card { background: linear-gradient(135deg, #2e1065, #581c87); margin: 0 15px 15px 15px; border-radius: 14px; padding: 15px; border: 1px solid var(--purple-light); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+
+    .acc-header {
+      background: linear-gradient(135deg, #4c1d95, #2e1065);
+      padding: 20px 15px 45px 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+    }
+    .acc-avatar {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      overflow: hidden;
+      background: #334155;
+    }
+    .acc-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .acc-info h3 { font-size: 18px; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 8px; }
+    .vip-tag { background: linear-gradient(90deg, #38bdf8, #818cf8); color: #fff; font-size: 10px; padding: 2px 8px; border-radius: 12px; font-weight: bold; display: inline-flex; align-items: center; gap: 3px; }
+    .acc-uid { font-size: 12px; color: var(--purple-light); margin-top: 4px; display: flex; align-items: center; gap: 5px; }
+    .acc-login-time { font-size: 10px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+
+    .acc-wallet-card {
+      background: var(--card-bg);
+      margin: -25px 15px 15px 15px;
+      padding: 15px;
+      border-radius: 16px;
+      border: 1px solid var(--purple-border);
+      position: relative;
+      z-index: 10;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
+    .acc-bal-title { font-size: 12px; color: var(--text-muted); }
+    .acc-bal-row { display: flex; align-items: center; gap: 10px; margin: 4px 0 15px 0; }
+    .acc-bal-amount { font-size: 26px; font-weight: 900; color: #fff; }
+    
+    .acc-quick-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; text-align: center; }
+    .acc-quick-item { cursor: pointer; }
+    .acc-q-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--card-inner); display: flex; align-items: center; justify-content: center; margin: 0 auto 5px auto; font-size: 20px; color: var(--gold); border: 1px solid var(--purple-border); }
+    .acc-quick-item span { font-size: 11px; color: var(--text-light); }
+
+    .safe-card {
+      background: var(--card-bg);
+      margin: 0 15px 15px 15px;
+      padding: 12px 15px;
+      border-radius: 14px;
+      border: 1px solid var(--purple-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+    .safe-left { display: flex; align-items: center; gap: 12px; }
+    .safe-icon { width: 40px; height: 40px; background: rgba(250, 204, 21, 0.15); border-radius: 10px; color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    .safe-title { font-size: 14px; font-weight: bold; color: #fff; }
+    .safe-desc { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+    .safe-badge { background: rgba(250, 204, 21, 0.2); color: var(--gold); font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: bold; display: flex; align-items: center; gap: 4px; }
+
+    .history-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 0 15px 15px 15px; }
+    .hist-item {
+      background: var(--card-bg);
+      border: 1px solid var(--purple-border);
+      border-radius: 14px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+    .hist-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .hist-text h5 { font-size: 13px; color: #fff; font-weight: 600; }
+    .hist-text p { font-size: 10px; color: var(--text-muted); }
+
+    .menu-list-card {
+      background: var(--card-bg);
+      margin: 0 15px 15px 15px;
+      border-radius: 14px;
+      border: 1px solid var(--purple-border);
+      overflow: hidden;
+    }
+    .menu-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 15px;
+      border-bottom: 1px solid var(--purple-border);
+      cursor: pointer;
+    }
+    .menu-row:last-child { border-bottom: none; }
+    .menu-left { display: flex; align-items: center; gap: 12px; }
+    .menu-left i { font-size: 18px; color: var(--gold); width: 22px; text-align: center; }
+    .menu-left span { font-size: 13px; color: #fff; }
+    .menu-right { display: flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 12px; }
+    .badge-count { background: #ef4444; color: #fff; font-size: 10px; padding: 2px 7px; border-radius: 10px; font-weight: bold; }
+
+    .logout-btn-box { padding: 0 15px 20px 15px; }
+    .logout-btn {
+      width: 100%;
+      background: transparent;
+      border: 1px solid #ef4444;
+      color: #ef4444;
+      padding: 12px;
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .ss-wallet-page { background: #f5f5f5; color: #333; min-height: 100vh; }
+    .ss-wallet-header { background: #f3c623; padding: 15px 15px 25px 15px; color: #fff; text-align: center; position: relative; }
+    .ss-wallet-header .title { font-size: 18px; font-weight: 500; margin-bottom: 12px; }
+    .ss-wallet-icon { font-size: 38px; margin-bottom: 4px; color: #fff; }
+    .ss-total-bal { font-size: 28px; font-weight: bold; }
+    .ss-sub-title { font-size: 11px; opacity: 0.9; margin-bottom: 20px; }
+    .ss-stats-row { display: flex; justify-content: space-around; text-align: center; }
+    .ss-stat-box h4 { font-size: 16px; font-weight: bold; }
+    .ss-stat-box p { font-size: 10px; opacity: 0.95; }
+
+    .ss-wallet-body { padding: 0 12px; margin-top: -15px; }
+    .ss-card-main { background: #fff; border-radius: 16px; padding: 20px 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 12px; }
+    .ss-rings-container { display: flex; justify-content: space-around; margin-bottom: 15px; }
+    .ss-ring-box { text-align: center; }
+    .ss-circle-outer { width: 90px; height: 90px; border-radius: 50%; border: 8px solid #f3c623; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px auto; font-weight: bold; font-size: 15px; color: #000; }
+    .ss-circle-outer.gray { border-color: #f1f5f9; color: #000; }
+    .ss-ring-box h5 { font-size: 14px; font-weight: bold; color: #000; }
+    .ss-ring-box p { font-size: 10px; color: #64748b; }
+
+    .ss-transfer-btn { background: #f3c623; color: #fff; border: none; width: 100%; padding: 12px; border-radius: 25px; font-weight: bold; font-size: 14px; margin: 10px 0 20px 0; cursor: pointer; }
+
+    .ss-icon-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; text-align: center; }
+    .ss-icon-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+    .ss-icon-bg { width: 44px; height: 44px; border-radius: 12px; background: #fdf8e6; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #f3c623; margin-bottom: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); }
+    .ss-icon-item span { font-size: 10px; color: #64748b; }
+
+    .ss-games-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .ss-game-box { background: #fff; border-radius: 12px; height: 75px; padding: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+    .ss-game-box.active-lottery { background: #f3c623; color: #fff; }
+    .ss-game-box h4 { font-size: 14px; font-weight: bold; }
+    .ss-game-box p { font-size: 11px; opacity: 0.8; }
+
+    /* FIXED DARK & GOLD NAV BAR */
+    .nav-bar { 
+      position: fixed; 
+      bottom: 0; 
+      left: 0; 
+      right: 0; 
+      max-width: 480px; 
+      margin: 0 auto; 
+      background: var(--card-bg); 
+      display: flex; 
+      justify-content: space-around; 
+      align-items: center; 
+      height: 60px; 
+      border-top: 1px solid var(--purple-border); 
+      z-index: 1000; 
+    }
+    .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 10px; color: var(--text-muted); text-decoration: none; cursor: pointer; flex: 1; transition: color 0.2s; }
+    .nav-item i { font-size: 18px; margin-bottom: 3px; }
+    .nav-item.active { color: var(--gold); font-weight: bold; }
+    
+    .nav-center-btn { width: 55px; height: 55px; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #000; margin-top: -22px; box-shadow: 0 4px 12px rgba(243, 198, 35, 0.4); border: 3px solid var(--bg-dark); font-size: 9px; font-weight: bold; cursor: pointer; }
+
+    .sub-page { position: fixed; top: 0; left: 0; right: 0; bottom: 0; max-width: 480px; margin: 0 auto; background: var(--bg-dark); color: var(--text-light); z-index: 2000; overflow-y: auto; display: none; padding-bottom: 30px; }
+    .sub-page.active { display: block; }
+    .sub-header { background: var(--card-bg); padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--purple-border); position: sticky; top: 0; z-index: 10; }
+    .sub-header i { font-size: 18px; color: var(--gold); cursor: pointer; }
+    .sub-header h3 { font-size: 16px; font-weight: 600; color: #fff; }
+
+    .mission-card, .rebate-card, .att-box { background: var(--card-bg); border: 1px solid var(--purple-border); border-radius: 12px; padding: 15px; margin: 12px 15px; }
+    .btn-action { width: 100%; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); border: none; padding: 12px; border-radius: 20px; font-weight: bold; color: #000; font-size: 14px; cursor: pointer; margin-top: 10px; }
+    .btn-action:disabled { background: #4b5563; color: #9ca3af; cursor: not-allowed; }
+
+    .progress-bar { width: 100%; background: var(--card-inner); height: 8px; border-radius: 4px; margin: 8px 0; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--gold); width: 0%; transition: width 0.3s; }
+
+    .data-card { background: var(--card-bg); border: 1px solid var(--purple-border); border-radius: 12px; padding: 12px 15px; margin: 10px 15px; font-size: 12px; line-height: 1.6; }
+    .data-card-header { display: flex; justify-content: space-between; border-bottom: 1px solid var(--purple-border); padding-bottom: 6px; margin-bottom: 6px; }
+    .status-completed, .status-complete { color: #10b981; font-weight: bold; }
+    .status-failed, .status-rejected, .status-lose { color: #ef4444; font-weight: bold; }
+
+    .wheel-container { position: relative; width: 290px; height: 290px; margin: 20px auto; }
+    .wheel-outer { width: 100%; height: 100%; border-radius: 50%; border: 4px solid var(--gold); padding: 8px; box-shadow: 0 0 20px rgba(124, 58, 237, 0.5); }
+    .wheel-spinner { width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(#3b1578 0deg 45deg, #211242 45deg 90deg, #3b1578 90deg 135deg, #211242 135deg 180deg, #3b1578 180deg 225deg, #211242 225deg 270deg, #3b1578 270deg 315deg, #211242 315deg 360deg); position: relative; transition: transform 4s cubic-bezier(0.15, 0.99, 0.18, 0.99); }
+    .wheel-item { position: absolute; width: 50%; height: 50%; transform-origin: 100% 100%; top: 0; left: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; color: var(--gold); }
+    .wheel-item:nth-child(1) { transform: rotate(0deg); }
+    .wheel-item:nth-child(2) { transform: rotate(45deg); }
+    .wheel-item:nth-child(3) { transform: rotate(90deg); }
+    .wheel-item:nth-child(4) { transform: rotate(135deg); }
+    .wheel-item:nth-child(5) { transform: rotate(180deg); }
+    .wheel-item:nth-child(6) { transform: rotate(225deg); }
+    .wheel-item:nth-child(7) { transform: rotate(270deg); }
+    .wheel-item:nth-child(8) { transform: rotate(315deg); }
+    .wheel-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 65px; height: 65px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-weight: 900; box-shadow: 0 0 10px rgba(0,0,0,0.5); cursor: pointer; }
+
+    /* WINGO GAME INTEGRATED UI STYLING */
+    .wingo-controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 15px 0; }
+    .wingo-btn { padding: 12px; border-radius: 12px; border: none; font-weight: bold; color: #fff; cursor: pointer; font-size: 14px; }
+    .wingo-btn.green { background: #10b981; }
+    .wingo-btn.violet { background: #8b5cf6; }
+    .wingo-btn.red { background: #ef4444; }
+    .wingo-btn.big { background: #f59e0b; }
+    .wingo-btn.small { background: #3b82f6; }
+    .wingo-numbers { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 10px 0; }
+    .wingo-num-btn { background: var(--card-inner); border: 1px solid var(--purple-border); color: var(--gold); padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; }
+
+    .custom-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
+    .custom-modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .custom-modal { background: #211242; border: 1px solid var(--gold); border-radius: 20px; width: 100%; max-width: 340px; padding: 22px 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8); transform: scale(0.8); transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .custom-modal-overlay.active .custom-modal { transform: scale(1); }
+    .modal-icon { width: 55px; height: 55px; border-radius: 50%; background: rgba(243, 198, 35, 0.15); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 12px auto; }
+    .modal-title { font-size: 17px; font-weight: bold; color: #fff; margin-bottom: 6px; }
+    .modal-desc { font-size: 13px; color: var(--purple-light); margin-bottom: 15px; line-height: 1.4; }
+    .modal-input { width: 100%; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--purple-light); background: var(--card-inner); color: #fff; font-size: 14px; outline: none; margin-bottom: 15px; text-align: center; }
+    .modal-btns { display: flex; gap: 10px; }
+    .modal-btn { flex: 1; padding: 10px; border-radius: 20px; border: none; font-weight: bold; font-size: 13px; cursor: pointer; }
+    .btn-confirm { background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: #000; }
+    .btn-cancel { background: rgba(255, 255, 255, 0.1); color: #fff; }
+
+    .toast-box { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-50px); background: var(--card-bg); border: 1px solid var(--gold); color: #fff; padding: 10px 18px; border-radius: 25px; font-size: 13px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 10000; opacity: 0; transition: all 0.3s ease; pointer-events: none; }
+    .toast-box.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <div class="logo">DK WIN</div>
+    <div class="top-icons">
+      <i class="fa-solid fa-download" onclick="showToast('App Download started...')"></i>
+      <i class="fa-solid fa-headset" onclick="showModal('Customer Support', 'Live Chat lines are busy. Please try again shortly.', 'info')"></i>
+    </div>
+  </div>
+
+  <!-- LOGIN PAGE VIEW -->
+  <div id="view-login" class="page-view active">
+    <div class="auth-container">
+      <div class="auth-header">
+        <div class="logo" style="font-size: 32px;">DK WIN</div>
+        <h2>Welcome Back</h2>
+        <p>Log in to access your account & play</p>
+      </div>
+      <div class="auth-form">
+        <div class="input-group">
+          <label><i class="fa-solid fa-phone"></i> Phone Number / UID</label>
+          <input type="text" id="login-phone" class="input-box" placeholder="017XXXXXXXX">
+        </div>
+        <div class="input-group">
+          <label><i class="fa-solid fa-lock"></i> Password</label>
+          <input type="password" id="login-password" class="input-box" placeholder="Enter password">
+        </div>
+        <button class="auth-btn" id="btn-login" onclick="handleLoginSubmit()">LOG IN</button>
+      </div>
+      <div class="auth-switch">
+        Don't have an account? <span onclick="switchAuthPage('register')">Register Now</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- REGISTER PAGE VIEW -->
+  <div id="view-register" class="page-view">
+    <div class="auth-container">
+      <div class="auth-header">
+        <div class="logo" style="font-size: 32px;">DK WIN</div>
+        <h2>Create Account</h2>
+        <p>Register today to get exclusive bonuses</p>
+      </div>
+      <div class="auth-form">
+        <div class="input-group">
+          <label><i class="fa-solid fa-phone"></i> Phone Number</label>
+          <input type="text" id="reg-phone" class="input-box" placeholder="017XXXXXXXX">
+        </div>
+        <div class="input-group">
+          <label><i class="fa-solid fa-lock"></i> Set Password</label>
+          <input type="password" id="reg-password" class="input-box" placeholder="Create password">
+        </div>
+        <div class="input-group">
+          <label><i class="fa-solid fa-gift"></i> Invite Code (Optional)</label>
+          <input type="text" id="reg-invite" class="input-box" placeholder="Enter invite code">
+        </div>
+        <button class="auth-btn" id="btn-register" onclick="handleRegisterSubmit()">REGISTER NOW</button>
+      </div>
+      <div class="auth-switch">
+        Already have an account? <span onclick="switchAuthPage('login')">Log In</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN APP HOME -->
+  <div id="view-home" class="page-view" style="padding: 0 15px;">
+    <div class="banner">
+      <h2>SPECIAL REWARD</h2>
+      <p>Play & Win Real Money Daily</p>
+    </div>
+    
+    <div class="marquee">
+      <span><i class="fa-solid fa-volume-high" style="color: var(--gold);"></i> Welcome to DK WIN Official Games!</span>
+      <span style="background: rgba(250, 204, 21, 0.2); color: var(--gold); padding: 2px 8px; border-radius: 10px; font-size: 10px;">Detail</span>
+    </div>
+
+    <div class="section-title"><i class="fa-solid fa-fire"></i> Hot Lottery Game</div>
+    <!-- WINGO Card linked to subpage view -->
+    <!-- WINGO Card linked to wingo.html -->
+<a href="wingo.html" style="text-decoration: none; color: inherit;">
+  <div class="game-card featured">
+    <span class="badge">POPULAR</span>
+    <i class="fa-solid fa-dice" style="font-size: 24px;"></i>
+    <h3>WINGO</h3>
+    <p>30s / 1m / 3m / 5m Color Guessing System</p>
+  </div>
+</a>
+
+    <div class="section-title"><i class="fa-solid fa-gamepad"></i> Mini Casino Games</div>
+    <div class="game-grid">
+      <div class="game-card" onclick="showToast('TRX Win Coming Soon!')"><i class="fa-solid fa-coins"></i><h3>TRX Win</h3><p>Crypto Hash</p></div>
+      <div class="game-card" onclick="showToast('K3 Dice Coming Soon!')"><i class="fa-solid fa-cubes"></i><h3>K3 Dice</h3><p>3 Dice Sum Bet</p></div>
+      <div class="game-card" onclick="showToast('5D Lottery Coming Soon!')"><i class="fa-solid fa-clover"></i><h3>5D Lottery</h3><p>Digital Match</p></div>
+      <div class="game-card" onclick="showToast('Slots Game Coming Soon!')"><i class="fa-solid fa-slot-machine"></i><h3>Slots</h3><p>Spin & Win</p></div>
+    </div>
+  </div>
+
+  <div id="view-activity" class="page-view">
+    <div class="act-header-purple">
+      <div class="logo">DK WIN ACTIVITY</div>
+      <div class="bonus-summary">
+        <div class="bonus-box">
+          <p>Today's bonus</p>
+          <h3 id="today-bonus">৳0.00</h3>
+        </div>
+        <div class="bonus-divider"></div>
+        <div class="bonus-box">
+          <p>Total bonus</p>
+          <h3 id="total-bonus">৳0.00</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="act-icon-grid">
+      <div class="act-icon-item" onclick="openSubPage('award')">
+        <div class="icon-box"><i class="fa-solid fa-award"></i></div>
+        <span>Activity Award</span>
+      </div>
+      <div class="act-icon-item" onclick="openSubPage('rebate')">
+        <div class="icon-box"><i class="fa-solid fa-coins"></i></div>
+        <span>Betting Rebate</span>
+      </div>
+      <div class="act-icon-item" onclick="openSubPage('vip')">
+        <div class="icon-box"><i class="fa-solid fa-crown"></i></div>
+        <span>VIP Bonus</span>
+      </div>
+      <div class="act-icon-item" onclick="openSubPage('wheel')">
+        <div class="icon-box"><i class="fa-solid fa-dharmachakra"></i></div>
+        <span>Invite Wheel</span>
+      </div>
+    </div>
+
+    <div class="act-cards-grid">
+      <div class="grid-card" onclick="claimRedeemCode()">
+        <div>
+          <h4>Gifts Code</h4>
+          <p>Redeem your promotion code for instant cash.</p>
+        </div>
+        <i class="fa-solid fa-gift" style="font-size: 28px; color: var(--gold); text-align: right;"></i>
+      </div>
+
+      <div class="grid-card" onclick="openSubPage('attendance')">
+        <div>
+          <h4>Attendance</h4>
+          <p>Claim daily consecutive check-in rewards.</p>
+        </div>
+        <i class="fa-solid fa-calendar-check" style="font-size: 28px; color: var(--gold); text-align: right;"></i>
+      </div>
+    </div>
+
+    <div class="long-card" onclick="openSubPage('attendance')">
+      <div>
+        <h3>DAILY CHECK-IN REWARD</h3>
+        <p>Log in every day to claim bonus rewards up to ৳31,000</p>
+      </div>
+      <i class="fa-solid fa-chevron-right" style="color: var(--gold);"></i>
+    </div>
+  </div>
+
+  <div id="view-wallet" class="page-view ss-wallet-page">
+    <div class="ss-wallet-header">
+      <div class="title">Wallet</div>
+      <i class="fa-solid fa-wallet ss-wallet-icon"></i>
+      <div class="ss-total-bal" id="ss-main-bal">৳0.00</div>
+      <div class="ss-sub-title">Total balance</div>
+
+      <div class="ss-stats-row">
+        <div class="ss-stat-box">
+          <h4 id="ss-total-wd">3442</h4>
+          <p>Total Withdrawal Amount</p>
+        </div>
+        <div class="ss-stat-box">
+          <h4 id="ss-total-dep">2380</h4>
+          <p>Total deposit amount</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="ss-wallet-body">
+      <div class="ss-card-main">
+        <div class="ss-rings-container">
+          <div class="ss-ring-box">
+            <div class="ss-circle-outer">100%</div>
+            <h5 id="ss-ring-main-bal">৳0.00</h5>
+            <p>Main wallet</p>
+          </div>
+          <div class="ss-ring-box">
+            <div class="ss-circle-outer gray">0%</div>
+            <h5>৳0.00</h5>
+            <p>3rd party wallet</p>
+          </div>
+        </div>
+
+        <button class="ss-transfer-btn" onclick="showToast('Main wallet transferred successfully!')">Main wallet transfer</button>
+
+        <div class="ss-icon-grid">
+          <div class="ss-icon-item" onclick="openDepositModal()">
+            <div class="ss-icon-bg"><i class="fa-solid fa-wallet"></i></div>
+            <span>Deposit</span>
+          </div>
+          <div class="ss-icon-item" onclick="openWithdrawModal()">
+            <div class="ss-icon-bg"><i class="fa-solid fa-credit-card"></i></div>
+            <span>Withdraw</span>
+          </div>
+          <div class="ss-icon-item" onclick="openSubPage('history-deposit')">
+            <div class="ss-icon-bg"><i class="fa-solid fa-book"></i></div>
+            <span>Deposit history</span>
+          </div>
+          <div class="ss-icon-item" onclick="openSubPage('history-withdraw')">
+            <div class="ss-icon-bg"><i class="fa-solid fa-receipt"></i></div>
+            <span>Withdrawal history</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ss-games-grid">
+        <div class="ss-game-box" onclick="showToast('ARGame selection activated!')">
+          <p>0.00</p>
+          <h4>ARGame</h4>
+        </div>
+        <div class="ss-game-box active-lottery" onclick="showToast('Lottery active wallet selected!')">
+          <p id="ss-lottery-bal">0.00</p>
+          <h4>Lottery</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="view-account" class="page-view">
+    <div class="acc-header">
+      <div class="acc-avatar">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=SHAFAYET" alt="Avatar">
+      </div>
+      <div class="acc-info">
+        <h3>MD NOYON SIR[cite: 5] <span class="vip-tag"><i class="fa-solid fa-star"></i> VIP1</span></h3>
+        <div class="acc-uid">
+          UID | <span id="display-uid">---</span>
+          <i class="fa-regular fa-copy" onclick="copyUID()" style="cursor: pointer; color: var(--gold);"></i>
+        </div>
+        <div class="acc-login-time">Last login: 2026-08-20 00:27:03</div>
+      </div>
+    </div>
+
+    <div class="acc-wallet-card">
+      <div class="acc-bal-title">Total balance</div>
+      <div class="acc-bal-row">
+        <div class="acc-bal-amount" id="main-balance">৳0.00</div>
+        <i class="fa-solid fa-rotate-right" onclick="showToast('Balance refreshed!')" style="color: var(--gold); cursor: pointer; font-size: 16px;"></i>
+      </div>
+      
+      <div class="acc-quick-grid">
+        <div class="acc-quick-item" onclick="switchTab('wallet')">
+          <div class="acc-q-icon"><i class="fa-solid fa-wallet" style="color:#f43f5e;"></i></div>
+          <span>Wallet</span>
+        </div>
+        <div class="acc-quick-item" onclick="openDepositModal()">
+          <div class="acc-q-icon"><i class="fa-solid fa-money-bill-transfer" style="color:#f97316;"></i></div>
+          <span>Deposit</span>
+        </div>
+        <div class="acc-quick-item" onclick="openWithdrawModal()">
+          <div class="acc-q-icon"><i class="fa-solid fa-building-columns" style="color:#3b82f6;"></i></div>
+          <span>Withdraw</span>
+        </div>
+        <div class="acc-quick-item" onclick="openSubPage('vip')">
+          <div class="acc-q-icon"><i class="fa-solid fa-crown" style="color:#10b981;"></i></div>
+          <span>VIP</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="safe-card" onclick="openSubPage('safe-vault')">
+      <div class="safe-left">
+        <div class="safe-icon"><i class="fa-solid fa-vault"></i></div>
+        <div>
+          <div class="safe-title">Safe</div>
+          <div class="safe-desc">Daily interest rate 0.1%, income every 1 minute.</div>
+        </div>
+      </div>
+      <div class="safe-badge"><span id="safe-bal-display">৳0.00</span> <i class="fa-solid fa-chevron-right" style="font-size: 10px;"></i></div>
+    </div>
+
+    <div class="history-grid">
+      <div class="hist-item" onclick="openSubPage('history-bet')">
+        <div class="hist-icon" style="background: rgba(59, 130, 246, 0.2);"><i class="fa-solid fa-gamepad" style="color:#3b82f6;"></i></div>
+        <div class="hist-text">
+          <h5>Game History</h5>
+          <p>My bet history</p>
+        </div>
+      </div>
+
+      <div class="hist-item" onclick="openSubPage('history-trans')">
+        <div class="hist-icon" style="background: rgba(16, 185, 129, 0.2);"><i class="fa-solid fa-receipt" style="color:#10b981;"></i></div>
+        <div class="hist-text">
+          <h5>Transaction</h5>
+          <p>My transaction</p>
+        </div>
+      </div>
+
+      <div class="hist-item" onclick="openSubPage('history-deposit')">
+        <div class="hist-icon" style="background: rgba(244, 63, 94, 0.2);"><i class="fa-solid fa-file-invoice-dollar" style="color:#f43f5e;"></i></div>
+        <div class="hist-text">
+          <h5>Deposit</h5>
+          <p>My deposit history</p>
+        </div>
+      </div>
+
+      <div class="hist-item" onclick="openSubPage('history-withdraw')">
+        <div class="hist-icon" style="background: rgba(249, 115, 22, 0.2);"><i class="fa-solid fa-hand-holding-dollar" style="color:#f97316;"></i></div>
+        <div class="hist-text">
+          <h5>Withdraw</h5>
+          <p>My withdraw history</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-list-card">
+      <div class="menu-row" onclick="openSubPage('notifications')">
+        <div class="menu-left">
+          <i class="fa-solid fa-envelope"></i>
+          <span>Notification</span>
+        </div>
+        <div class="menu-right">
+          <span class="badge-count">1</span>
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+      </div>
+
+      <div class="menu-row" onclick="claimRedeemCode()">
+        <div class="menu-left">
+          <i class="fa-solid fa-gift"></i>
+          <span>Gifts</span>
+        </div>
+        <div class="menu-right">
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+      </div>
+
+      <div class="menu-row" onclick="showModal('Game Statistics', 'Total Win/Loss Analytics Engine synced successfully!', 'info')">
+        <div class="menu-left">
+          <i class="fa-solid fa-chart-column"></i>
+          <span>Game statistics</span>
+        </div>
+        <div class="menu-right">
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+      </div>
+
+      <div class="menu-row" onclick="showToast('Language set to Bangla (BN)')">
+        <div class="menu-left">
+          <i class="fa-solid fa-globe"></i>
+          <span>Language</span>
+        </div>
+        <div class="menu-right">
+          <span>Bangla</span>
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="logout-btn-box">
+      <button class="logout-btn" onclick="showConfirmModal('Logout Confirmation', 'Are you sure you want to exit your account?', () => logoutUser())">
+        <i class="fa-solid fa-right-from-bracket"></i> Log out
+      </button>
+    </div>
+  </div>
+
+  <!-- FIXED PREVIEW NAV BAR -->
+  <div class="nav-bar" id="main-nav-bar" style="display: none;">
+    <div class="nav-item active" id="nav-item-home" onclick="switchTab('home', this)"><i class="fa-solid fa-house"></i><span>Home</span></div>
+    <div class="nav-item" id="nav-item-activity" onclick="switchTab('activity', this)"><i class="fa-solid fa-gift"></i><span>Activity</span></div>
+    <div class="nav-center-btn" onclick="openSubPage('wheel')">
+      <i class="fa-solid fa-dharmachakra fa-spin" style="font-size: 18px;"></i>
+      <span>Get ৳1,000</span>
+    </div>
+    <div class="nav-item" onclick="showToast('Promotion dashboard open')"><i class="fa-solid fa-sack-dollar"></i><span>Promotion</span></div>
+    <div class="nav-item" id="nav-item-account" onclick="switchTab('account', this)"><i class="fa-solid fa-user"></i><span>Account</span></div>
+  </div>
+
+  <!-- WINGO GAME INTEGRATED SUB PAGE -->
+  <div id="sub-wingo-game" class="sub-page">
+    <div class="sub-header">
+      <i class="fa-solid fa-chevron-left" onclick="closeSubPage('wingo-game')"></i>
+      <h3>Win Go 30s Game</h3>
+      <div></div>
+    </div>
+    <div style="padding: 15px;">
+      <div class="mission-card" style="text-align: center;">
+        <p style="font-size: 12px; color: var(--text-muted);">Period Number</p>
+        <h3 style="color: var(--gold); margin-bottom: 10px;" id="wingo-period">202608210001</h3>
+        <p style="font-size: 12px; color: var(--text-muted);">Time Remaining</p>
+        <h1 style="color: #ef4444; font-size: 36px;" id="wingo-timer">00:30</h1>
+      </div>
+
+      <div class="wingo-controls">
+        <button class="wingo-btn green" onclick="placeWingoBet('Green')">Green</button>
+        <button class="wingo-btn violet" onclick="placeWingoBet('Violet')">Violet</button>
+        <button class="wingo-btn red" onclick="placeWingoBet('Red')">Red</button>
+      </div>
+
+      <div class="wingo-numbers">
+        <div class="wingo-num-btn" onclick="placeWingoBet('0')">0</div>
+        <div class="wingo-num-btn" onclick="placeWingoBet('1')">1</div>
+        <div class="wingo-num-btn" onclick="placeWingoBet('2')">2</div>
+        <div class="wingo-num-btn" onclick="placeWingoBet('3')">3</div>
+        <div class="wingo-num-btn" onclick="placeWingoBet('4')">4</div>
+        <div class="wingo-num-btn" onclick="placeWingoBet('5')">5</div>
+        <div class="wingo-num-btn" onclick="placeWingoBet('6')">6</div>
+        <div class="wingo-num-btn" onclick="placeWingoBet('7')">7</div>
+        <div class="wingo-num-btn" onclick="placeWingoBet('8')">8</div>
+        <div class="wingo-num-btn" onclick="placeWingoBet('9')">9</div>
+      </div>
+
+      <div style="display: flex; gap: 10px; margin-top: 10px;">
+        <button class="wingo-btn big" style="flex: 1;" onclick="placeWingoBet('Big')">Big</button>
+        <button class="wingo-btn small" style="flex: 1;" onclick="placeWingoBet('Small')">Small</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUB PAGES -->
+  <div id="sub-award" class="sub-page">
+    <div class="sub-header">
+      <i class="fa-solid fa-chevron-left" onclick="closeSubPage('award')"></i>
+      <h3>Activity Tasks</h3>
+      <div></div>
+    </div>
+    
+    <div class="mission-card">
+      <div style="display: flex; justify-content: space-between;">
+        <h4>Betting Goal: ৳1,000</h4>
+        <span style="color: var(--gold); font-weight: bold;">Reward: ৳10</span>
+      </div>
+      <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Progress: <span id="prog-val-1">0</span>/1000</p>
+      <div class="progress-bar"><div class="progress-fill" id="prog-bar-1"></div></div>
+      <button class="btn-action" id="btn-task-1" onclick="claimTask(1000, 10, 'btn-task-1')">Claim ৳10</button>
+    </div>
+
+    <div class="mission-card">
+      <div style="display: flex; justify-content: space-between;">
+        <h4>Betting Goal: ৳10,000</h4>
+        <span style="color: var(--gold); font-weight: bold;">Reward: ৳100</span>
+      </div>
+      <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Progress: <span id="prog-val-2">0</span>/10000</p>
+      <div class="progress-bar"><div class="progress-fill" id="prog-bar-2"></div></div>
+      <button class="btn-action" id="btn-task-2" onclick="claimTask(10000, 100, 'btn-task-2')">Claim ৳100</button>
+    </div>
+  </div>
+
+  <div id="sub-rebate" class="sub-page">
+    <div class="sub-header">
+      <i class="fa-solid fa-chevron-left" onclick="closeSubPage('rebate')"></i>
+      <h3>Real-time Rebate (0.6%)</h3>
+      <div></div>
+    </div>
+
+    <div class="rebate-card">
+      <h3>Uncollected Rebate Amount</h3>
+      <div style="font-size: 28px; color: var(--gold); font-weight: bold; margin: 10px 0;" id="pending-rebate">৳0.00</div>
+      <p style="font-size: 12px; color: var(--text-muted);">Rebate updates automatically based on total valid betting volume.</p>
+      <button class="btn-action" onclick="claimRebate()">Collect Rebate</button>
+    </div>
+  </div>
+
+  <div id="sub-attendance" class="sub-page">
+    <div class="sub-header">
+      <i class="fa-solid fa-chevron-left" onclick="closeSubPage('attendance')"></i>
+      <h3>Daily Attendance</h3>
+      <div></div>
+    </div>
+
+    <div style="padding: 15px; text-align: center;">
+      <h2 style="color: var(--gold);">Check-In Bonus</h2>
+      <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Login consecutively to get bigger rewards</p>
+    </div>
+
+    <div class="att-box" style="text-align: center;">
+      <i class="fa-solid fa-coins" style="font-size: 32px; color: var(--gold); margin-bottom: 8px;"></i>
+      <h4>Day 1 Reward: ৳5.00</h4>
+      <button class="btn-action" id="btn-checkin" onclick="checkIn()">Claim Check-In</button>
+    </div>
+  </div>
+
+  <div id="sub-vip" class="sub-page">
+    <div class="sub-header">
+      <i class="fa-solid fa-chevron-left" onclick="closeSubPage('vip')"></i>
+      <h3>VIP Level Center</h3>
+      <div></div>
+    </div>
+
+    <div class="mission-card">
+      <h4>Current Status: VIP 1</h4>
+      <p style="font-size: 11px; color: var(--text-muted); margin: 5px 0;">EXP: 3,157 / 50,000</p>
+      <div class="progress-bar"><div class="progress-fill" style="width: 6.31%;"></div></div>
+      <button class="btn-action" style="margin-top: 15px;" onclick="showToast('VIP Level Rewards claimed!')">Claim Level Rewards</button>
+    </div>
+  </div>
+
+  <div id="sub-wheel" class="sub-page">
+    <div class="sub-header">
+      <i class="fa-solid fa-chevron-left" onclick="closeSubPage('wheel')"></i>
+      <h3>Lucky Invite Wheel</h3>
+      <div></div>
+    </div>
+
+    <div style="text-align: center; padding: 15px;">
+      <p style="font-size: 12px; color: var(--text-muted);">Spin Count Available</p>
+      <h2 style="font-size: 32px; color: var(--gold); margin: 5px 0;" id="wheel-spins-left">1</h2>
+      <p style="font-size: 11px; color: var(--purple-light);">Invite friends to earn wheel spins!</p>
+    </div>
+
+    <div class="wheel-container">
+      <div class="wheel-outer">
+        <div class="wheel-spinner" id="main-wheel-element">
+          <div class="wheel-item">৳100</div>
+          <div class="wheel-item">৳85</div>
+          <div class="wheel-item">৳65</div>
+          <div class="wheel-item">৳75</div>
+          <div class="wheel-item">৳80</div>
+          <div class="wheel-item">৳10</div>
+          <div class="wheel-item">৳50</div>
+          <div class="wheel-item">৳55</div>
+        </div>
+      </div>
+      <div class="wheel-center" onclick="startSpin()">SPIN</div>
+    </div>
+
+    <div style="padding: 0 15px;">
+      <button class="btn-action" onclick="startSpin()">SPIN WHEEL NOW</button>
+    </div>
+  </div>
+
+  <div id="sub-safe-vault" class="sub-page">
+    <div class="sub-header">
+      <i class="fa-solid fa-chevron-left" onclick="closeSubPage('safe-vault')"></i>
+      <h3>Safe Vault</h3>
+      <div></div>
+    </div>
+    <div style="padding: 15px;">
+      <div class="mission-card">
+        <h3>Safe Vault Balance</h3>
+        <h2 style="color: var(--gold); margin: 10px 0;" id="safe-vault-amount">৳0.00</h2>
+        <p style="font-size: 11px; color: var(--text-muted);">Interest Rate: 0.1% / Day</p>
+        <div style="display:flex; gap: 10px; margin-top: 15px;">
+          <button class="btn-action" style="background:#10b981; color:#fff;" onclick="transferSafe('in')">Transfer In</button>
+          <button class="btn-action" style="background:#ef4444; color:#fff;" onclick="transferSafe('out')">Transfer Out</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="sub-history-bet" class="sub-page">
+    <div class="sub-header">
+      <i class="fa-solid fa-chevron-left" onclick="closeSubPage('history-bet')"></i>
+      <h3>Bet History (Win Go)</h3>
+      <div></div>
+    </div>
+    <div id="container-bet-list"></div>
+  </div>
+
+  <div id="sub-history-deposit" class="sub-page">
+    <div class="sub-header">
+      <i class="fa-solid fa-chevron-left" onclick="closeSubPage('history-deposit')"></i>
+      <h3>Deposit History</h3>
+      <div></div>
+    </div>
+    <div id="container-deposit-list"></div>
+  </div>
+
+  <div id="sub-history-withdraw" class="sub-page">
+    <div class="sub-header">
+      <i class="fa-solid fa-chevron-left" onclick="closeSubPage('history-withdraw')"></i>
+      <h3>Withdrawal History</h3>
+      <div></div>
+    </div>
+    <div id="container-withdraw-list"></div>
+  </div>
+
+  <div id="sub-history-trans" class="sub-page">
+    <div class="sub-header">
+      <i class="fa-solid fa-chevron-left" onclick="closeSubPage('history-trans')"></i>
+      <h3>All Transactions</h3>
+      <div></div>
+    </div>
+    <div id="container-trans-list"></div>
+  </div>
+
+  <div id="sub-notifications" class="sub-page">
+    <div class="sub-header">
+      <i class="fa-solid fa-chevron-left" onclick="closeSubPage('notifications')"></i>
+      <h3>Notifications</h3>
+      <div></div>
+    </div>
+    <div style="padding: 15px;">
+      <div class="mission-card">
+        <h4 style="color: var(--gold);">Withdrawal Security Alert</h4>
+        <p style="font-size: 11px; color: var(--text-muted); margin-top: 5px;">2026-06-22 08:30:39</p>
+        <p style="font-size: 12px; margin-top: 8px;">হ্যালো, আমাদের সিস্টেম সনাক্ত করেছে যে আপনি অবৈধ বাজি তৈরি করছেন, অনুগ্রহ করে গ্রাহক পরিষেবাতে যোগাযোগ করুন, ধন্যবাদ</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="custom-modal-overlay" id="custom-modal-overlay">
+    <div class="custom-modal">
+      <div class="modal-icon" id="modal-icon"><i class="fa-solid fa-bell"></i></div>
+      <div class="modal-title" id="modal-title">Notification</div>
+      <div class="modal-desc" id="modal-desc">Message content goes here...</div>
+      <input type="number" class="modal-input" id="modal-input" placeholder="Enter amount..." style="display: none;">
+      <div class="modal-btns">
+        <button class="modal-btn btn-cancel" id="modal-btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="modal-btn btn-confirm" id="modal-btn-confirm">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-box" id="toast-box">
+    <i class="fa-solid fa-circle-check" style="color: var(--gold);"></i>
+    <span id="toast-msg">Action Successful!</span>
+  </div>
+
+  <!-- FIREBASE REALTIME ENGINE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, setDoc, onSnapshot, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDEndkTBhWD2Lo4ePYHQ9Lz-Fec4KS1E78",
+      authDomain: "joly444-f4b83.firebaseapp.com",
+      projectId: "joly444-f4b83",
+      storageBucket: "joly444-f4b83.firebasestorage.app",
+      messagingSenderId: "176580504004",
+      appId: "1:176580504004:web:8d8b358b4cc079f9501c91"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let activeUserRef = null;
+    let unsubscribeListener = null;
+
+    // Login Engine
+    window.loginUserEngine = async function(phone, password) {
+      if (!phone) { showToast("Please enter phone number!"); return; }
+      if (!password) { showToast("Please enter password!"); return; }
+      
+      const btn = document.getElementById('btn-login');
+      btn.innerText = "Verifying...";
+      btn.disabled = true;
+
+      const cleanPhone = phone.trim();
+      activeUserRef = doc(db, "users", cleanPhone);
+
+      try {
+        const userSnap = await getDoc(activeUserRef);
+        
+        if (!userSnap.exists()) {
+          showToast("Account not found! Please register first.");
+          btn.innerText = "LOG IN";
+          btn.disabled = false;
+          return;
+        }
+
+        const userData = userSnap.data();
+        if (userData.password && userData.password !== password) {
+          showToast("Incorrect password!");
+          btn.innerText = "LOG IN";
+          btn.disabled = false;
+          return;
+        }
+
+        window.currentUserId = cleanPhone;
+        localStorage.setItem('dkwin_active_user', cleanPhone);
+
+        startRealtimeSync(cleanPhone);
+
+        document.getElementById('main-nav-bar').style.display = 'flex';
+        switchTab('home');
+        showToast("Logged in successfully!");
+
+      } catch (e) {
+        console.error("Login Error:", e);
+        showToast("Database Connection Error!");
+      } finally {
+        btn.innerText = "LOG IN";
+        btn.disabled = false;
+      }
+    };
+
+    // Registration Engine
+    window.registerUserEngine = async function(phone, password, inviteCode) {
+      if (!phone || !password) { showToast("Please fill all required fields!"); return; }
+      
+      const btn = document.getElementById('btn-register');
+      btn.innerText = "Creating Account...";
+      btn.disabled = true;
+
+      const cleanPhone = phone.trim();
+      const userRef = doc(db, "users", cleanPhone);
+
+      try {
+        const userSnap = await getDoc(userRef);
+        
+        if (userSnap.exists()) {
+          showToast("Phone number already registered! Please login.");
+          switchAuthPage('login');
+          btn.innerText = "REGISTER NOW";
+          btn.disabled = false;
+          return;
+        }
+
+        await setDoc(userRef, {
+          phone: cleanPhone,
+          password: password,
+          inviteCode: inviteCode || '',
+          balance: 0.00,
+          createdAt: new Date().toISOString()
+        });
+
+        showToast("Registration successful! Logging in...");
+        window.loginUserEngine(cleanPhone, password);
+
+      } catch (e) {
+        console.error("Register Error:", e);
+        showToast("Registration Failed!");
+      } finally {
+        btn.innerText = "REGISTER NOW";
+        btn.disabled = false;
+      }
+    };
+
+    // Balance Sync Function
+    function startRealtimeSync(userId) {
+      if (unsubscribeListener) unsubscribeListener();
+
+      activeUserRef = doc(db, "users", userId);
+      unsubscribeListener = onSnapshot(activeUserRef, (docSnap) => {
+        if (docSnap.exists()) {
+          window.userBalance = parseFloat(docSnap.data().balance || 0);
+          
+          const uidElem = document.getElementById('display-uid');
+          if (uidElem) uidElem.innerText = userId;
+
+          if (typeof window.updateUI === 'function') {
+            window.updateUI();
+          }
+        }
+      }, (error) => {
+        console.error("Snapshot error:", error);
+      });
+    }
+
+    window.dbUpdateBalance = async (newBal) => {
+      if (!activeUserRef) return;
+      try {
+        await updateDoc(activeUserRef, { balance: newBal });
+      } catch(e) { 
+        console.error("Balance update failed:", e); 
+      }
+    };
+
+    // Auto Session Check
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedUser = localStorage.getItem('dkwin_active_user');
+      if (savedUser) {
+        window.currentUserId = savedUser;
+        startRealtimeSync(savedUser);
+        document.getElementById('main-nav-bar').style.display = 'flex';
+        switchTab('home');
+      } else {
+        switchAuthPage('login');
+      }
+    });
+
+    window.logoutUser = function() {
+      if (unsubscribeListener) unsubscribeListener();
+      localStorage.removeItem('dkwin_active_user');
+      window.currentUserId = null;
+      document.getElementById('main-nav-bar').style.display = 'none';
+      switchAuthPage('login');
+      showToast("Logged out successfully!");
+    };
+  </script>
+
+  <script>
+    window.userBalance = 0.00;
+    let safeBalance = 0.00;
+    let todayBonus = 0.00;
+    let totalBonus = 0.00;
+    let totalBetVolume = 0;
+    let pendingRebate = 0.00;
+    let availableSpins = 1;
+    let hasCheckedIn = false;
+
+    const appData = {
+      depositHistory: [
+        { type: "GoPay-Nagad", amount: "৳1,400.00", time: "2026-08-10 12:12:04", orderNo: "RC20260810121204401081983b", status: "Complete" },
+        { type: "GoPay-bKash", amount: "৳170.00", time: "2026-08-10 08:20:41", orderNo: "RC20260810082041711081052a", status: "Complete" }
+      ],
+      withdrawalHistory: [
+        { type: "E-Wallet", amount: "৳5,300.00", time: "2026-08-10 17:07:48", orderNo: "WD20260810170748591081429a", status: "Completed", remarks: "" }
+      ],
+      betHistory: [
+        { game: "Win Go 30s", period: "20260818100052463", orderNo: "WG2026081820311589904802541877", select: "Small", totalBet: "৳87.00", result: "5 Big Violet Green", status: "Lose", profitLoss: "-৳87.00", time: "2026-08-19 02:31:15" }
+      ]
+    };
+
+    function switchAuthPage(page) {
+      document.querySelectorAll('.page-view').forEach(view => view.classList.remove('active'));
+      document.getElementById('main-nav-bar').style.display = 'none';
+      if (page === 'login') {
+        document.getElementById('view-login').classList.add('active');
+      } else if (page === 'register') {
+        document.getElementById('view-register').classList.add('active');
+      }
+    }
+
+    function handleLoginSubmit() {
+      const p = document.getElementById('login-phone').value;
+      const pass = document.getElementById('login-password').value;
+      window.loginUserEngine(p, pass);
+    }
+
+    function handleRegisterSubmit() {
+      const p = document.getElementById('reg-phone').value;
+      const pass = document.getElementById('reg-password').value;
+      const inv = document.getElementById('reg-invite').value;
+      window.registerUserEngine(p, pass, inv);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast-box');
+      document.getElementById('toast-msg').innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    function showModal(title, desc, icon = 'info', onConfirm = null) {
+      document.getElementById('modal-title').innerText = title;
+      document.getElementById('modal-desc').innerText = desc;
+      document.getElementById('modal-input').style.display = 'none';
+      document.getElementById('modal-btn-cancel').style.display = 'none';
+      const confirmBtn = document.getElementById('modal-btn-confirm');
+      confirmBtn.onclick = () => { closeModal(); if(onConfirm) onConfirm(); };
+      document.getElementById('custom-modal-overlay').classList.add('active');
+    }
+
+    function showConfirmModal(title, desc, onConfirm) {
+      document.getElementById('modal-title').innerText = title;
+      document.getElementById('modal-desc').innerText = desc;
+      document.getElementById('modal-input').style.display = 'none';
+      document.getElementById('modal-btn-cancel').style.display = 'block';
+      const confirmBtn = document.getElementById('modal-btn-confirm');
+      confirmBtn.onclick = () => { closeModal(); if(onConfirm) onConfirm(); };
+      document.getElementById('custom-modal-overlay').classList.add('active');
+    }
+
+    function showInputModal(title, desc, placeholder, onConfirm) {
+      document.getElementById('modal-title').innerText = title;
+      document.getElementById('modal-desc').innerText = desc;
+      const input = document.getElementById('modal-input');
+      input.style.display = 'block'; input.value = ''; input.placeholder = placeholder;
+      document.getElementById('modal-btn-cancel').style.display = 'block';
+      const confirmBtn = document.getElementById('modal-btn-confirm');
+      confirmBtn.onclick = () => { const val = input.value; closeModal(); if(onConfirm) onConfirm(val); };
+      document.getElementById('custom-modal-overlay').classList.add('active');
+    }
+
+    function closeModal() { document.getElementById('custom-modal-overlay').classList.remove('active'); }
+
+    function updateUI() {
+      const currentBal = window.userBalance || 0;
+      const balStr = '৳' + currentBal.toFixed(2);
+      document.getElementById('main-balance').innerText = balStr;
+      document.getElementById('ss-main-bal').innerText = balStr;
+      document.getElementById('ss-ring-main-bal').innerText = balStr;
+      document.getElementById('ss-lottery-bal').innerText = currentBal.toFixed(2);
+      document.getElementById('today-bonus').innerText = '৳' + todayBonus.toFixed(2);
+      document.getElementById('total-bonus').innerText = '৳' + totalBonus.toFixed(2);
+      document.getElementById('pending-rebate').innerText = '৳' + pendingRebate.toFixed(2);
+      document.getElementById('wheel-spins-left').innerText = availableSpins;
+      document.getElementById('safe-bal-display').innerText = '৳' + safeBalance.toFixed(2);
+      document.getElementById('safe-vault-amount').innerText = '৳' + safeBalance.toFixed(2);
+
+      updateTaskUI(1, 1000);
+      updateTaskUI(2, 10000);
+    }
+
+    function copyUID() {
+      const uidText = document.getElementById('display-uid').innerText;
+      navigator.clipboard.writeText(uidText);
+      showToast('UID Copied to Clipboard!');
+    }
+
+    function renderHistoryLists() {
+      document.getElementById('container-deposit-list').innerHTML = appData.depositHistory.map(item => `
+        <div class="data-card">
+          <div class="data-card-header"><strong>${item.type}</strong><span class="${item.status === 'Complete' ? 'status-complete' : 'status-failed'}">${item.status}</span></div>
+          <div>Amount: <strong>${item.amount}</strong></div>
+          <small style="color:var(--text-muted)">Time: ${item.time}</small>
+        </div>
+      `).join('');
+
+      document.getElementById('container-withdraw-list').innerHTML = appData.withdrawalHistory.map(item => `
+        <div class="data-card">
+          <div class="data-card-header"><strong>${item.type}</strong><span class="${item.status === 'Completed' ? 'status-completed' : 'status-rejected'}">${item.status}</span></div>
+          <div>Amount: <strong>${item.amount}</strong></div>
+          <small style="color:var(--text-muted)">Time: ${item.time}</small>
+        </div>
+      `).join('');
+
+      document.getElementById('container-bet-list').innerHTML = appData.betHistory.map(item => `
+        <div class="data-card">
+          <div class="data-card-header"><strong>${item.game}</strong><span class="status-lose">${item.status}</span></div>
+          <div>Select: <strong>${item.select}</strong> | Bet: <strong>${item.totalBet}</strong></div>
+          <small style="color:var(--text-muted)">Time: ${item.time}</small>
+        </div>
+      `).join('');
+
+      document.getElementById('container-trans-list').innerHTML = [
+        ...appData.depositHistory.map(d => ({ title: d.type + " Deposit", amt: d.amount, time: d.time, type: 'dep' })),
+        ...appData.withdrawalHistory.map(w => ({ title: w.type + " Withdrawal", amt: w.amount, time: w.time, type: 'wd' }))
+      ].map(t => `
+        <div class="data-card">
+          <div class="data-card-header"><strong>${t.title}</strong><span style="color:${t.type === 'dep' ? '#10b981' : '#f43f5e'}">${t.amt}</span></div>
+          <small style="color:var(--text-muted)">Time: ${t.time}</small>
+        </div>
+      `).join('');
+    }
+
+    function openDepositModal() {
+      showInputModal("Quick Deposit", "Enter deposit amount (৳):", "e.g. 500", (val) => {
+        let amount = parseFloat(val);
+        if (amount && !isNaN(amount) && amount > 0) {
+          window.userBalance += amount;
+          if(window.dbUpdateBalance) window.dbUpdateBalance(window.userBalance);
+          updateUI();
+          showToast(`৳${amount} Deposited Successfully!`);
+        } else { showToast("Invalid Amount Entered!"); }
+      });
+    }
+
+    function openWithdrawModal() {
+      showInputModal("Quick Withdrawal", "Enter withdrawal amount (৳):", "e.g. 100", (val) => {
+        let amount = parseFloat(val);
+        if (amount && amount > 0 && amount <= window.userBalance) {
+          window.userBalance -= amount;
+          if(window.dbUpdateBalance) window.dbUpdateBalance(window.userBalance);
+          updateUI();
+          showToast(`৳${amount} Withdrawal Request Submitted!`);
+        } else { showToast("Insufficient Balance!"); }
+      });
+    }
+
+    function transferSafe(direction) {
+      if(direction === 'in') {
+        showInputModal("Transfer to Safe", "Enter amount to transfer IN to Safe:", "Amount...", (val) => {
+          let amt = parseFloat(val);
+          if(amt && amt > 0 && amt <= window.userBalance) {
+            window.userBalance -= amt; safeBalance += amt;
+            if(window.dbUpdateBalance) window.dbUpdateBalance(window.userBalance);
+            updateUI(); showToast("Transferred to Safe successfully!");
+          } else { showToast("Insufficient main balance!"); }
+        });
+      } else {
+        showInputModal("Transfer from Safe", "Enter amount to transfer OUT from Safe:", "Amount...", (val) => {
+          let amt = parseFloat(val);
+          if(amt && amt > 0 && amt <= safeBalance) {
+            safeBalance -= amt; window.userBalance += amt;
+            if(window.dbUpdateBalance) window.dbUpdateBalance(window.userBalance);
+            updateUI(); showToast("Transferred out from Safe successfully!");
+          } else { showToast("Insufficient safe balance!"); }
+        });
+      }
+    }
+
+    function updateTaskUI(taskNum, target) {
+      let current = Math.min(totalBetVolume, target);
+      let percentage = (current / target) * 100;
+      document.getElementById(`prog-val-${taskNum}`).innerText = current;
+      document.getElementById(`prog-bar-${taskNum}`).style.width = percentage + '%';
+    }
+
+    function switchTab(tabName, element) {
+      document.querySelectorAll('.page-view').forEach(view => view.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+      
+      const targetView = document.getElementById('view-' + tabName);
+      if(targetView) targetView.classList.add('active');
+
+      if(element) {
+        element.classList.add('active');
+      } else {
+        let targetNav = document.getElementById('nav-item-' + tabName);
+        if(targetNav) targetNav.classList.add('active');
+      }
+    }
+
+    function openSubPage(pageId) { 
+      const sub = document.getElementById('sub-' + pageId);
+      if(sub) sub.classList.add('active'); 
+    }
+    
+    function closeSubPage(pageId) { 
+      const sub = document.getElementById('sub-' + pageId);
+      if(sub) sub.classList.remove('active'); 
+    }
+
+    // WINGO BETTING SYSTEM INTEGRATION
+    function placeWingoBet(selection) {
+      showInputModal(`Bet on [${selection}]`, "Enter bet amount (৳):", "e.g. 50", (val) => {
+        let betAmt = parseFloat(val);
+        if (betAmt && betAmt > 0 && betAmt <= window.userBalance) {
+          window.userBalance -= betAmt;
+          totalBetVolume += betAmt;
+          pendingRebate += (betAmt * 0.006);
+          if(window.dbUpdateBalance) window.dbUpdateBalance(window.userBalance);
+          
+          appData.betHistory.unshift({
+            game: "Win Go 30s",
+            period: document.getElementById('wingo-period').innerText,
+            orderNo: "WG" + Date.now(),
+            select: selection,
+            totalBet: "৳" + betAmt.toFixed(2),
+            result: "Pending...",
+            status: "Pending",
+            profitLoss: "0.00",
+            time: new Date().toISOString().replace('T', ' ').substring(0, 19)
+          });
+          
+          renderHistoryLists();
+          updateUI();
+          showToast(`Bet ৳${betAmt} placed on ${selection}!`);
+        } else {
+          showToast("Invalid Amount or Insufficient Balance!");
+        }
+      });
+    }
+
+    // WINGO TIMER SIMULATION
+    let timeLeft = 30;
+    setInterval(() => {
+      timeLeft--;
+      if (timeLeft < 0) timeLeft = 30;
+      let timerElem = document.getElementById('wingo-timer');
+      if (timerElem) {
+        timerElem.innerText = `00:${timeLeft < 10 ? '0' + timeLeft : timeLeft}`;
+      }
+    }, 1000);
+
+    function claimTask(requiredBet, reward, btnId) {
+      if (totalBetVolume < requiredBet) {
+        showModal("Goal Not Reached", `You need ৳${requiredBet - totalBetVolume} more bet volume to claim!`, "warning");
+        return;
+      }
+      window.userBalance += reward; todayBonus += reward; totalBonus += reward;
+      if(window.dbUpdateBalance) window.dbUpdateBalance(window.userBalance);
+      let btn = document.getElementById(btnId); 
+      if(btn) { btn.disabled = true; btn.innerText = "Claimed"; }
+      updateUI(); showToast(`Successfully claimed ৳${reward} reward!`);
+    }
+
+    function claimRebate() {
+      if (pendingRebate <= 0) { showToast("No rebate available to collect!"); return; }
+      let claimed = pendingRebate;
+      window.userBalance += claimed; todayBonus += claimed; totalBonus += claimed; pendingRebate = 0.00;
+      if(window.dbUpdateBalance) window.dbUpdateBalance(window.userBalance);
+      updateUI(); showToast(`৳${claimed.toFixed(2)} Rebate collected!`);
+    }
+
+    function checkIn() {
+      if(hasCheckedIn) { showToast("Already checked in today!"); return; }
+      let checkInReward = 5.00;
+      window.userBalance += checkInReward; todayBonus += checkInReward; totalBonus += checkInReward;
+      hasCheckedIn = true;
+      if(window.dbUpdateBalance) window.dbUpdateBalance(window.userBalance);
+      let btn = document.getElementById('btn-checkin'); 
+      if(btn) { btn.disabled = true; btn.innerText = "Checked In"; }
+      updateUI(); showToast(`Day 1 Check-In Bonus ৳${checkInReward} added!`);
+    }
+
+    function claimRedeemCode() {
+      showInputModal("Gifts Code", "Enter your promotion gift code:", "DKWIN10", (code) => {
+        if(code === "DKWIN10") {
+          window.userBalance += 10; todayBonus += 10; totalBonus += 10;
+          if(window.dbUpdateBalance) window.dbUpdateBalance(window.userBalance);
+          updateUI(); showToast("Promo code applied! ৳10 Added.");
+        } else if (code) { showToast("Invalid Promo Code!"); }
+      });
+    }
+
+    let rotationDeg = 0;
+    function startSpin() {
+      if(availableSpins <= 0) { showToast("No spins left! Invite friends to earn free spins."); return; }
+      availableSpins--;
+      const wheel = document.getElementById('main-wheel-element');
+      const randomSpin = Math.floor(3600 + Math.random() * 360);
+      rotationDeg += randomSpin;
+      if(wheel) wheel.style.transform = `rotate(${rotationDeg}deg)`;
+      setTimeout(() => {
+        let winBonus = 10.00;
+        window.userBalance += winBonus; todayBonus += winBonus; totalBonus += winBonus;
+        if(window.dbUpdateBalance) window.dbUpdateBalance(window.userBalance);
+        updateUI();
+        showModal("Congratulations!", `You won ৳${winBonus.toFixed(2)} bonus reward!`, "reward");
+      }, 4000);
+    }
+
+    window.onload = () => {
+      updateUI();
+      renderHistoryLists();
+    };
+  </script>
+</body>   
+</html>
