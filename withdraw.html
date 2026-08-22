@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Withdraw - DK WIN</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+    body { background: #0f172a; color: #fff; padding: 20px; max-width: 500px; margin: 0 auto; }
+    .card { background: #1e293b; border-radius: 12px; padding: 20px; border: 1px solid #334155; margin-top: 20px; }
+    h2 { color: #ef4444; text-align: center; margin-bottom: 20px; }
+    .input-field, select { width: 100%; padding: 10px; border-radius: 6px; outline: none; background: #0f172a; color: #fff; border: 1px solid #475569; margin-top: 5px; margin-bottom: 15px; }
+    .btn { width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: bold; background: #ef4444; color: #fff; cursor: pointer; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <h2><i class="fa-solid fa-money-bill-transfer"></i> Withdraw Money</h2>
+  <div class="card">
+    <label>আপনার ফোন নম্বর (অ্যাকাউন্ট)</label>
+    <input type="text" id="user-phone" class="input-field" placeholder="017xxxxxxxx">
+
+    <label>পেমেন্ট মেথড</label>
+    <select id="method" class="input-field">
+      <option value="bKash">bKash Personal</option>
+      <option value="Nagad">Nagad Personal</option>
+    </select>
+
+    <label>টাকা পাওয়ার নম্বর</label>
+    <input type="text" id="account-num" class="input-field" placeholder="017xxxxxxxx">
+
+    <label>টাকার পরিমাণ (৳)</label>
+    <input type="number" id="amount" class="input-field" placeholder="Min 300">
+
+    <button class="btn" onclick="submitWithdraw()">Submit Withdraw</button>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, collection, addDoc, updateDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDEndkTBhWD2Lo4ePYHQ9Lz-Fec4KS1E78",
+      authDomain: "joly444-f4b83.firebaseapp.com",
+      projectId: "joly444-f4b83",
+      storageBucket: "joly444-f4b83.firebasestorage.app",
+      messagingSenderId: "176580504004",
+      appId: "1:176580504004:web:8d8b358b4cc079f9501c91"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.submitWithdraw = async () => {
+      const phone = document.getElementById("user-phone").value.trim();
+      const method = document.getElementById("method").value;
+      const targetAcc = document.getElementById("account-num").value.trim();
+      const amount = parseFloat(document.getElementById("amount").value);
+
+      if(!phone || !targetAcc || !amount) return alert("সবগুলো ঘর সঠিকভাবে পূরণ করুন!");
+
+      // User Balance Verification
+      const q = query(collection(db, "users"), where("phone", "==", phone));
+      const qSnap = await getDocs(q);
+      
+      let userDocRef = null;
+      let currentBal = 0;
+
+      if(!qSnap.empty) {
+        userDocRef = doc(db, "users", qSnap.docs[0].id);
+        currentBal = parseFloat(qSnap.docs[0].data().balance || 0);
+      } else {
+        const directRef = doc(db, "users", phone);
+        const directSnap = await getDoc(directRef);
+        if(directSnap.exists()) {
+          userDocRef = directRef;
+          currentBal = parseFloat(directSnap.data().balance || 0);
+        }
+      }
+
+      if(!userDocRef) return alert("ইউজার অ্যাকাউন্ট পাওয়া যায়নি!");
+      if(currentBal < amount) return alert("আপনার অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই!");
+
+      // Deduct balance immediately upon request
+      await updateDoc(userDocRef, { balance: currentBal - amount });
+
+      // Create Request
+      await addDoc(collection(db, "requests"), {
+        userPhone: phone,
+        type: "withdraw",
+        amount: amount,
+        details: `${method} | Acc: ${targetAcc}`,
+        status: "pending",
+        timestamp: Date.now()
+      });
+
+      alert("উইথড্র রিকুয়েস্ট সফলভাবে জমা হয়েছে!");
+      window.location.reload();
+    };
+  </script>
+</body>
+</html>

@@ -411,6 +411,28 @@
     history.pushState(null, null, location.href);
     window.onpopstate = function () { window.location.href = "index.html"; };
 
+    // --- DATA CONNECTION LOGIC (localStorage & BroadcastChannel) ---
+    const channel = new BroadcastChannel('game_sync');
+
+    function getSavedBalance() {
+      const saved = localStorage.getItem('userBalance');
+      return saved !== null ? parseFloat(saved) : 1000.00;
+    }
+
+    function setSavedBalance(amount) {
+      localStorage.setItem('userBalance', amount.toFixed(2));
+      channel.postMessage({ type: 'BALANCE_UPDATE', balance: amount });
+    }
+
+    let userBalance = getSavedBalance();
+
+    channel.onmessage = (event) => {
+      if (event.data && event.data.type === 'BALANCE_UPDATE') {
+        userBalance = parseFloat(event.data.balance);
+        updateUI();
+      }
+    };
+
     let audioCtx = null;
     function initAudioContext() {
       if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -444,8 +466,6 @@
 
     window.addEventListener('click', initAudioContext, { once: true });
     window.addEventListener('touchstart', initAudioContext, { once: true });
-
-    let userBalance = 1000.00;
 
     const markets = {
       '30s': { name: '30sec', duration: 30, timer: 30, period: 202608210001, history: [], myBets: [], adminPreset: 'Auto' },
@@ -654,6 +674,7 @@
                 bet.status = 'Succeed';
                 bet.winAmount = winAmount;
                 userBalance += winAmount;
+                setSavedBalance(userBalance); // Save update
                 totalWinThisRound += winAmount;
                 lastBetResult = 'win';
               } else {
@@ -1006,6 +1027,8 @@
       }
 
       userBalance -= totalAmount;
+      setSavedBalance(userBalance); // Save Update
+
       let now = new Date();
       let timeStr = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2,'0')}-${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
       let orderNo = 'WG' + now.getFullYear() + (now.getMonth()+1).toString().padStart(2,'0') + now.getDate().toString().padStart(2,'0') + Math.floor(Math.random()*1000000000);

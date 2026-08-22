@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deposit - DK WIN</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+    body { background: #0f172a; color: #fff; padding: 20px; max-width: 500px; margin: 0 auto; }
+    .card { background: #1e293b; border-radius: 12px; padding: 20px; border: 1px solid #334155; margin-top: 20px; }
+    h2 { color: #f3c623; text-align: center; margin-bottom: 20px; }
+    .gateway-info { background: #0f172a; padding: 12px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 15px; }
+    .input-field, select { width: 100%; padding: 10px; border-radius: 6px; outline: none; background: #0f172a; color: #fff; border: 1px solid #475569; margin-top: 5px; margin-bottom: 15px; }
+    .btn { width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: bold; background: #10b981; color: #fff; cursor: pointer; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <h2><i class="fa-solid fa-wallet"></i> Deposit Money</h2>
+  <div class="card">
+    <div class="gateway-info">
+      <p style="font-size: 12px; color: #94a3b8;">bKash Number (Send Money):</p>
+      <strong id="bkash-display" style="color: #f3c623;">Loading...</strong><br><br>
+      <p style="font-size: 12px; color: #94a3b8;">Nagad Number (Send Money):</p>
+      <strong id="nagad-display" style="color: #f3c623;">Loading...</strong>
+    </div>
+
+    <label>আপনার ফোন নম্বর</label>
+    <input type="text" id="user-phone" class="input-field" placeholder="017xxxxxxxx">
+
+    <label>পেমেন্ট মেথড</label>
+    <select id="method" class="input-field">
+      <option value="bKash">bKash</option>
+      <option value="Nagad">Nagad</option>
+    </select>
+
+    <label>টাকার পরিমাণ (৳)</label>
+    <input type="number" id="amount" class="input-field" placeholder="Min 100">
+
+    <label>Transaction ID (TrxID)</label>
+    <input type="text" id="trx-id" class="input-field" placeholder="e.g. 8N7A65K9">
+
+    <button class="btn" onclick="submitDeposit()">Submit Deposit</button>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDEndkTBhWD2Lo4ePYHQ9Lz-Fec4KS1E78",
+      authDomain: "joly444-f4b83.firebaseapp.com",
+      projectId: "joly444-f4b83",
+      storageBucket: "joly444-f4b83.firebasestorage.app",
+      messagingSenderId: "176580504004",
+      appId: "1:176580504004:web:8d8b358b4cc079f9501c91"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Get Gateways from Admin Settings
+    getDoc(doc(db, "settings", "gateways")).then(snap => {
+      if(snap.exists()){
+        document.getElementById("bkash-display").innerText = snap.data().bkash || "N/A";
+        document.getElementById("nagad-display").innerText = snap.data().nagad || "N/A";
+      }
+    });
+
+    window.submitDeposit = async () => {
+      const phone = document.getElementById("user-phone").value.trim();
+      const method = document.getElementById("method").value;
+      const amount = parseFloat(document.getElementById("amount").value);
+      const trxId = document.getElementById("trx-id").value.trim();
+
+      if(!phone || !amount || !trxId) return alert("সবগুলো ঘর সঠিকভাবে পূরণ করুন!");
+
+      await addDoc(collection(db, "requests"), {
+        userPhone: phone,
+        type: "deposit",
+        amount: amount,
+        details: `${method} | Trx: ${trxId}`,
+        status: "pending",
+        timestamp: Date.now()
+      });
+
+      alert("ডিপোজিট রিকুয়েস্ট পাঠানো হয়েছে!");
+      window.location.reload();
+    };
+  </script>
+</body>
+</html>

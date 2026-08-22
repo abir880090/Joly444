@@ -353,7 +353,7 @@
     .ss-transfer-btn { background: #f3c623; color: #fff; border: none; width: 100%; padding: 12px; border-radius: 25px; font-weight: bold; font-size: 14px; margin: 10px 0 20px 0; cursor: pointer; }
 
     .ss-icon-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; text-align: center; }
-    .ss-icon-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+    .ss-icon-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; text-decoration: none; color: inherit; }
     .ss-icon-bg { width: 44px; height: 44px; border-radius: 12px; background: #fdf8e6; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #f3c623; margin-bottom: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); }
     .ss-icon-item span { font-size: 10px; color: #64748b; }
 
@@ -522,16 +522,15 @@
     </div>
 
     <div class="section-title"><i class="fa-solid fa-fire"></i> Hot Lottery Game</div>
-    <!-- WINGO Card linked to subpage view -->
-    <!-- WINGO Card linked to wingo.html -->
-<a href="wingo.html" style="text-decoration: none; color: inherit;">
-  <div class="game-card featured">
-    <span class="badge">POPULAR</span>
-    <i class="fa-solid fa-dice" style="font-size: 24px;"></i>
-    <h3>WINGO</h3>
-    <p>30s / 1m / 3m / 5m Color Guessing System</p>
-  </div>
-</a>
+    <!-- WINGO Card linked to sub page or external page safely -->
+    <a href="wingo.html">
+      <div class="game-card featured" >
+      <span class="badge">POPULAR</span>
+      <i class="fa-solid fa-dice" style="font-size: 24px;"></i>
+      <h3>WINGO</h3>
+      <p>30s / 1m / 3m / 5m Color Guessing System</p>
+    </div>
+    </a>
 
     <div class="section-title"><i class="fa-solid fa-gamepad"></i> Mini Casino Games</div>
     <div class="game-grid">
@@ -613,15 +612,15 @@
 
       <div class="ss-stats-row">
         <div class="ss-stat-box">
-          <h4 id="ss-total-wd">3442</h4>
+          <h4 id="ss-total-wd">৳0.00</h4>
           <p>Total Withdrawal Amount</p>
         </div>
         <div class="ss-stat-box">
-          <h4 id="ss-total-dep">2380</h4>
+          <h4 id="ss-total-dep">৳0.00</h4>
           <p>Total deposit amount</p>
         </div>
       </div>
-    </div>
+    </div> 
 
     <div class="ss-wallet-body">
       <div class="ss-card-main">
@@ -679,12 +678,12 @@
         <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=SHAFAYET" alt="Avatar">
       </div>
       <div class="acc-info">
-        <h3>MD NOYON SIR[cite: 5] <span class="vip-tag"><i class="fa-solid fa-star"></i> VIP1</span></h3>
+        <h3>MD NOYON SIR <span class="vip-tag"><i class="fa-solid fa-star"></i> VIP1</span></h3>
         <div class="acc-uid">
           UID | <span id="display-uid">---</span>
           <i class="fa-regular fa-copy" onclick="copyUID()" style="cursor: pointer; color: var(--gold);"></i>
         </div>
-        <div class="acc-login-time">Last login: 2026-08-20 00:27:03</div>
+        <div class="acc-login-time">Last login: 2026-08-22 20:00:00</div>
       </div>
     </div>
 
@@ -819,7 +818,7 @@
       <i class="fa-solid fa-dharmachakra fa-spin" style="font-size: 18px;"></i>
       <span>Get ৳1,000</span>
     </div>
-    <div class="nav-item" onclick="showToast('Promotion dashboard open')"><i class="fa-solid fa-sack-dollar"></i><span>Promotion</span></div>
+    <div class="nav-item" onclick="switchTab('wallet', this)"><i class="fa-solid fa-wallet"></i><span>Wallet</span></div>
     <div class="nav-item" id="nav-item-account" onclick="switchTab('account', this)"><i class="fa-solid fa-user"></i><span>Account</span></div>
   </div>
 
@@ -833,7 +832,7 @@
     <div style="padding: 15px;">
       <div class="mission-card" style="text-align: center;">
         <p style="font-size: 12px; color: var(--text-muted);">Period Number</p>
-        <h3 style="color: var(--gold); margin-bottom: 10px;" id="wingo-period">202608210001</h3>
+        <h3 style="color: var(--gold); margin-bottom: 10px;" id="wingo-period">202608220001</h3>
         <p style="font-size: 12px; color: var(--text-muted);">Time Remaining</p>
         <h1 style="color: #ef4444; font-size: 36px;" id="wingo-timer">00:30</h1>
       </div>
@@ -1040,8 +1039,8 @@
     <div style="padding: 15px;">
       <div class="mission-card">
         <h4 style="color: var(--gold);">Withdrawal Security Alert</h4>
-        <p style="font-size: 11px; color: var(--text-muted); margin-top: 5px;">2026-06-22 08:30:39</p>
-        <p style="font-size: 12px; margin-top: 8px;">হ্যালো, আমাদের সিস্টেম সনাক্ত করেছে যে আপনি অবৈধ বাজি তৈরি করছেন, অনুগ্রহ করে গ্রাহক পরিষেবাতে যোগাযোগ করুন, ধন্যবাদ</p>
+        <p style="font-size: 11px; color: var(--text-muted); margin-top: 5px;">2026-08-22 08:30:39</p>
+        <p style="font-size: 12px; margin-top: 8px;">হ্যালো, আমাদের সিস্টেমে যেকোনো অ্যাকাউন্টের নিরাপত্তা পর্যবেক্ষণ করা হয়। সিস্টেমে কোনো সমস্যা থাকলে কাস্টমার সার্ভিসে যোগাযোগ করুন।</p>
       </div>
     </div>
   </div>
@@ -1116,6 +1115,7 @@
 
         window.currentUserId = cleanPhone;
         localStorage.setItem('dkwin_active_user', cleanPhone);
+        localStorage.setItem('dkwin_user_balance', userData.balance || 0);
 
         startRealtimeSync(cleanPhone);
 
@@ -1159,6 +1159,8 @@
           password: password,
           inviteCode: inviteCode || '',
           balance: 0.00,
+          totalDeposit: 0.00,
+          totalWithdraw: 0.00,
           createdAt: new Date().toISOString()
         });
 
@@ -1181,7 +1183,17 @@
       activeUserRef = doc(db, "users", userId);
       unsubscribeListener = onSnapshot(activeUserRef, (docSnap) => {
         if (docSnap.exists()) {
-          window.userBalance = parseFloat(docSnap.data().balance || 0);
+          const data = docSnap.data();
+          const val = parseFloat(data.balance || 0);
+          window.userBalance = val;
+          localStorage.setItem('dkwin_user_balance', val);
+
+          if (data.totalDeposit !== undefined) {
+            document.getElementById('ss-total-dep').innerText = '৳' + parseFloat(data.totalDeposit).toFixed(2);
+          }
+          if (data.totalWithdraw !== undefined) {
+            document.getElementById('ss-total-wd').innerText = '৳' + parseFloat(data.totalWithdraw).toFixed(2);
+          }
           
           const uidElem = document.getElementById('display-uid');
           if (uidElem) uidElem.innerText = userId;
@@ -1195,16 +1207,33 @@
       });
     }
 
-    window.dbUpdateBalance = async (newBal) => {
-      if (!activeUserRef) return;
-      try {
-        await updateDoc(activeUserRef, { balance: newBal });
-      } catch(e) { 
-        console.error("Balance update failed:", e); 
+    window.dbUpdateBalance = async (newBal, addedDeposit = 0, addedWithdraw = 0) => {
+      if (!activeUserRef) {
+        const savedUser = localStorage.getItem('dkwin_active_user');
+        if (savedUser) activeUserRef = doc(db, "users", savedUser);
+      }
+      if (activeUserRef) {
+        try {
+          let updateObj = { balance: newBal };
+          if (addedDeposit > 0) {
+            const snap = await getDoc(activeUserRef);
+            const currentDep = snap.exists() ? (snap.data().totalDeposit || 0) : 0;
+            updateObj.totalDeposit = currentDep + addedDeposit;
+          }
+          if (addedWithdraw > 0) {
+            const snap = await getDoc(activeUserRef);
+            const currentWd = snap.exists() ? (snap.data().totalWithdraw || 0) : 0;
+            updateObj.totalWithdraw = currentWd + addedWithdraw;
+          }
+          await updateDoc(activeUserRef, updateObj);
+          localStorage.setItem('dkwin_user_balance', newBal);
+        } catch(e) { 
+          console.error("Balance update failed:", e); 
+        }
       }
     };
 
-    // Auto Session Check
+    // Auto Session Check & Sync Event Across Pages
     window.addEventListener('DOMContentLoaded', () => {
       const savedUser = localStorage.getItem('dkwin_active_user');
       if (savedUser) {
@@ -1217,9 +1246,24 @@
       }
     });
 
+    // Listen to changes made in wingo.html via localStorage
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'dkwin_user_balance') {
+        window.userBalance = parseFloat(e.newValue || 0);
+        updateUI();
+      }
+      if (e.key === 'dkwin_bet_history') {
+        try {
+          appData.betHistory = JSON.parse(e.newValue);
+          renderHistoryLists();
+        } catch(err){}
+      }
+    });
+
     window.logoutUser = function() {
       if (unsubscribeListener) unsubscribeListener();
       localStorage.removeItem('dkwin_active_user');
+      localStorage.removeItem('dkwin_user_balance');
       window.currentUserId = null;
       document.getElementById('main-nav-bar').style.display = 'none';
       switchAuthPage('login');
@@ -1228,7 +1272,7 @@
   </script>
 
   <script>
-    window.userBalance = 0.00;
+    window.userBalance = parseFloat(localStorage.getItem('dkwin_user_balance')) || 0.00;
     let safeBalance = 0.00;
     let todayBonus = 0.00;
     let totalBonus = 0.00;
@@ -1239,15 +1283,12 @@
 
     const appData = {
       depositHistory: [
-        { type: "GoPay-Nagad", amount: "৳1,400.00", time: "2026-08-10 12:12:04", orderNo: "RC20260810121204401081983b", status: "Complete" },
-        { type: "GoPay-bKash", amount: "৳170.00", time: "2026-08-10 08:20:41", orderNo: "RC20260810082041711081052a", status: "Complete" }
+        { type: "bKash / Nagad", amount: "৳500.00", time: "2026-08-20 12:12:04", orderNo: "RC20260810121204401081983b", status: "Complete" }
       ],
       withdrawalHistory: [
-        { type: "E-Wallet", amount: "৳5,300.00", time: "2026-08-10 17:07:48", orderNo: "WD20260810170748591081429a", status: "Completed", remarks: "" }
+        { type: "bKash / Nagad", amount: "৳200.00", time: "2026-08-21 17:07:48", orderNo: "WD20260810170748591081429a", status: "Completed", remarks: "" }
       ],
-      betHistory: [
-        { game: "Win Go 30s", period: "20260818100052463", orderNo: "WG2026081820311589904802541877", select: "Small", totalBet: "৳87.00", result: "5 Big Violet Green", status: "Lose", profitLoss: "-৳87.00", time: "2026-08-19 02:31:15" }
-      ]
+      betHistory: JSON.parse(localStorage.getItem('dkwin_bet_history')) || []
     };
 
     function switchAuthPage(page) {
@@ -1333,34 +1374,36 @@
 
     function copyUID() {
       const uidText = document.getElementById('display-uid').innerText;
-      navigator.clipboard.writeText(uidText);
-      showToast('UID Copied to Clipboard!');
+      if (uidText && uidText !== '---') {
+        navigator.clipboard.writeText(uidText);
+        showToast('UID Copied to Clipboard!');
+      }
     }
 
     function renderHistoryLists() {
-      document.getElementById('container-deposit-list').innerHTML = appData.depositHistory.map(item => `
+      document.getElementById('container-deposit-list').innerHTML = appData.depositHistory.length ? appData.depositHistory.map(item => `
         <div class="data-card">
           <div class="data-card-header"><strong>${item.type}</strong><span class="${item.status === 'Complete' ? 'status-complete' : 'status-failed'}">${item.status}</span></div>
           <div>Amount: <strong>${item.amount}</strong></div>
           <small style="color:var(--text-muted)">Time: ${item.time}</small>
         </div>
-      `).join('');
+      `).join('') : '<p style="text-align:center; padding:20px; font-size:12px; color:var(--text-muted);">No deposits found</p>';
 
-      document.getElementById('container-withdraw-list').innerHTML = appData.withdrawalHistory.map(item => `
+      document.getElementById('container-withdraw-list').innerHTML = appData.withdrawalHistory.length ? appData.withdrawalHistory.map(item => `
         <div class="data-card">
           <div class="data-card-header"><strong>${item.type}</strong><span class="${item.status === 'Completed' ? 'status-completed' : 'status-rejected'}">${item.status}</span></div>
           <div>Amount: <strong>${item.amount}</strong></div>
           <small style="color:var(--text-muted)">Time: ${item.time}</small>
         </div>
-      `).join('');
+      `).join('') : '<p style="text-align:center; padding:20px; font-size:12px; color:var(--text-muted);">No withdrawals found</p>';
 
-      document.getElementById('container-bet-list').innerHTML = appData.betHistory.map(item => `
+      document.getElementById('container-bet-list').innerHTML = appData.betHistory.length ? appData.betHistory.map(item => `
         <div class="data-card">
           <div class="data-card-header"><strong>${item.game}</strong><span class="status-lose">${item.status}</span></div>
           <div>Select: <strong>${item.select}</strong> | Bet: <strong>${item.totalBet}</strong></div>
           <small style="color:var(--text-muted)">Time: ${item.time}</small>
         </div>
-      `).join('');
+      `).join('') : '<p style="text-align:center; padding:20px; font-size:12px; color:var(--text-muted);">No bets placed yet</p>';
 
       document.getElementById('container-trans-list').innerHTML = [
         ...appData.depositHistory.map(d => ({ title: d.type + " Deposit", amt: d.amount, time: d.time, type: 'dep' })),
@@ -1378,7 +1421,17 @@
         let amount = parseFloat(val);
         if (amount && !isNaN(amount) && amount > 0) {
           window.userBalance += amount;
-          if(window.dbUpdateBalance) window.dbUpdateBalance(window.userBalance);
+          if(window.dbUpdateBalance) window.dbUpdateBalance(window.userBalance, amount, 0);
+          
+          appData.depositHistory.unshift({
+            type: "Deposit",
+            amount: "৳" + amount.toFixed(2),
+            time: new Date().toISOString().replace('T', ' ').substring(0, 19),
+            orderNo: "DEP" + Date.now(),
+            status: "Complete"
+          });
+          
+          renderHistoryLists();
           updateUI();
           showToast(`৳${amount} Deposited Successfully!`);
         } else { showToast("Invalid Amount Entered!"); }
@@ -1390,7 +1443,17 @@
         let amount = parseFloat(val);
         if (amount && amount > 0 && amount <= window.userBalance) {
           window.userBalance -= amount;
-          if(window.dbUpdateBalance) window.dbUpdateBalance(window.userBalance);
+          if(window.dbUpdateBalance) window.dbUpdateBalance(window.userBalance, 0, amount);
+          
+          appData.withdrawalHistory.unshift({
+            type: "Withdrawal",
+            amount: "৳" + amount.toFixed(2),
+            time: new Date().toISOString().replace('T', ' ').substring(0, 19),
+            orderNo: "WD" + Date.now(),
+            status: "Completed"
+          });
+
+          renderHistoryLists();
           updateUI();
           showToast(`৳${amount} Withdrawal Request Submitted!`);
         } else { showToast("Insufficient Balance!"); }
@@ -1422,8 +1485,10 @@
     function updateTaskUI(taskNum, target) {
       let current = Math.min(totalBetVolume, target);
       let percentage = (current / target) * 100;
-      document.getElementById(`prog-val-${taskNum}`).innerText = current;
-      document.getElementById(`prog-bar-${taskNum}`).style.width = percentage + '%';
+      let valElem = document.getElementById(`prog-val-${taskNum}`);
+      let barElem = document.getElementById(`prog-bar-${taskNum}`);
+      if(valElem) valElem.innerText = current.toFixed(0);
+      if(barElem) barElem.style.width = percentage + '%';
     }
 
     function switchTab(tabName, element) {
@@ -1472,6 +1537,8 @@
             profitLoss: "0.00",
             time: new Date().toISOString().replace('T', ' ').substring(0, 19)
           });
+
+          localStorage.setItem('dkwin_bet_history', JSON.stringify(appData.betHistory));
           
           renderHistoryLists();
           updateUI();
@@ -1486,7 +1553,13 @@
     let timeLeft = 30;
     setInterval(() => {
       timeLeft--;
-      if (timeLeft < 0) timeLeft = 30;
+      if (timeLeft < 0) {
+        timeLeft = 30;
+        let periodElem = document.getElementById('wingo-period');
+        if(periodElem) {
+          periodElem.innerText = parseInt(periodElem.innerText) + 1;
+        }
+      }
       let timerElem = document.getElementById('wingo-timer');
       if (timerElem) {
         timerElem.innerText = `00:${timeLeft < 10 ? '0' + timeLeft : timeLeft}`;
@@ -1495,7 +1568,7 @@
 
     function claimTask(requiredBet, reward, btnId) {
       if (totalBetVolume < requiredBet) {
-        showModal("Goal Not Reached", `You need ৳${requiredBet - totalBetVolume} more bet volume to claim!`, "warning");
+        showModal("Goal Not Reached", `You need ৳${(requiredBet - totalBetVolume).toFixed(2)} more bet volume to claim!`, "warning");
         return;
       }
       window.userBalance += reward; todayBonus += reward; totalBonus += reward;
