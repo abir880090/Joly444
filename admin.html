@@ -9,7 +9,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
     body { background: #0f172a; color: #f8fafc; padding: 20px; max-width: 1100px; margin: 0 auto; }
     h2 { color: #f3c623; margin-bottom: 20px; text-align: center; font-size: 24px; }
-    
+     
     .section-card { background: #1e293b; border-radius: 12px; padding: 20px; margin-bottom: 25px; border: 1px solid #334155; }
     .section-card h3 { color: #38bdf8; margin-bottom: 15px; font-size: 18px; display: flex; align-items: center; gap: 8px; }
     
@@ -56,16 +56,6 @@
     .badge-complete { background: #10b981; color: #fff; padding: 3px 8px; border-radius: 10px; font-size: 11px; }
     .badge-blocked { background: #ef4444; color: #fff; padding: 3px 8px; border-radius: 10px; font-size: 11px; }
   </style>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyDEndkTBhWD2Lo4ePYHQ9Lz-Fec4KS1E78",
-    projectId: "joly444-f4b83",
-  };
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-</script>
 </head>
 <body>
 
@@ -203,35 +193,75 @@
     </table>
   </div>
 
-  <!-- GAME SIGNAL CONTROL -->
+  <!-- GAME SIGNAL CONTROL (SYNCED WITH WINGO.HTML) -->
   <div class="section-card">
-    <h3><i class="fa-solid fa-gears"></i> Manual Game Signals</h3>
+    <h3><i class="fa-solid fa-gears"></i> WinGo Preset Result Control</h3>
     <div class="signal-grid">
       <div class="signal-box">
         <h4>Win Go 30s</h4>
         <select id="signal-30s">
-          <option value="auto">Auto</option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option>
+          <option value="auto">Auto (Random)</option>
+          <option value="0">0 (Red/Violet)</option>
+          <option value="1">1 (Green)</option>
+          <option value="2">2 (Red)</option>
+          <option value="3">3 (Green)</option>
+          <option value="4">4 (Red)</option>
+          <option value="5">5 (Green/Violet)</option>
+          <option value="6">6 (Red)</option>
+          <option value="7">7 (Green)</option>
+          <option value="8">8 (Red)</option>
+          <option value="9">9 (Green)</option>
         </select>
         <button class="btn btn-signal" onclick="setSignal('30s')">Set Result</button>
       </div>
       <div class="signal-box">
         <h4>Win Go 1m</h4>
         <select id="signal-1m">
-          <option value="auto">Auto</option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option>
+          <option value="auto">Auto (Random)</option>
+          <option value="0">0 (Red/Violet)</option>
+          <option value="1">1 (Green)</option>
+          <option value="2">2 (Red)</option>
+          <option value="3">3 (Green)</option>
+          <option value="4">4 (Red)</option>
+          <option value="5">5 (Green/Violet)</option>
+          <option value="6">6 (Red)</option>
+          <option value="7">7 (Green)</option>
+          <option value="8">8 (Red)</option>
+          <option value="9">9 (Green)</option>
         </select>
         <button class="btn btn-signal" onclick="setSignal('1m')">Set Result</button>
       </div>
       <div class="signal-box">
         <h4>Win Go 3m</h4>
         <select id="signal-3m">
-          <option value="auto">Auto</option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option>
+          <option value="auto">Auto (Random)</option>
+          <option value="0">0 (Red/Violet)</option>
+          <option value="1">1 (Green)</option>
+          <option value="2">2 (Red)</option>
+          <option value="3">3 (Green)</option>
+          <option value="4">4 (Red)</option>
+          <option value="5">5 (Green/Violet)</option>
+          <option value="6">6 (Red)</option>
+          <option value="7">7 (Green)</option>
+          <option value="8">8 (Red)</option>
+          <option value="9">9 (Green)</option>
         </select>
         <button class="btn btn-signal" onclick="setSignal('3m')">Set Result</button>
       </div>
       <div class="signal-box">
         <h4>Win Go 5m</h4>
         <select id="signal-5m">
-          <option value="auto">Auto</option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option>
+          <option value="auto">Auto (Random)</option>
+          <option value="0">0 (Red/Violet)</option>
+          <option value="1">1 (Green)</option>
+          <option value="2">2 (Red)</option>
+          <option value="3">3 (Green)</option>
+          <option value="4">4 (Red)</option>
+          <option value="5">5 (Green/Violet)</option>
+          <option value="6">6 (Red)</option>
+          <option value="7">7 (Green)</option>
+          <option value="8">8 (Red)</option>
+          <option value="9">9 (Green)</option>
         </select>
         <button class="btn btn-signal" onclick="setSignal('5m')">Set Result</button>
       </div>
@@ -284,6 +314,7 @@
 
     // Helper: Find User Doc Reference by Phone or ID
     async function getUserRef(phoneOrId) {
+      if(!phoneOrId) return null;
       const directRef = doc(db, "users", phoneOrId);
       const directSnap = await getDoc(directRef);
       if (directSnap.exists()) return directRef;
@@ -360,7 +391,7 @@
       let html = "";
       snapshot.forEach(d => {
         const b = d.data();
-        html += `<tr><td>${b.user || b.phone}</td><td>${b.mode}</td><td>${b.choice}</td><td>৳${b.amount}</td></tr>`;
+        html += `<tr><td>${b.user || b.phone || 'N/A'}</td><td>${b.mode || '30s'}</td><td>${b.choice}</td><td>৳${b.amount}</td></tr>`;
       });
       document.getElementById("live-bets-body").innerHTML = html || "<tr><td colspan='4'>No active bets...</td></tr>";
     });
@@ -399,12 +430,30 @@
       await updateDoc(doc(db, "users", docId), { isBlocked: !status }); 
     };
 
-    // Set Signals
+    // Set Signals - Synced with markets collection & preset_result field in wingo.html
     window.setSignal = async (mode) => {
       const val = document.getElementById(`signal-${mode}`).value;
-      await setDoc(doc(db, "game_signals", mode), { overrideResult: val }, { merge: true });
-      alert(`Signal Saved for ${mode}!`);
+      const presetVal = val === 'auto' ? null : parseInt(val);
+      
+      await setDoc(doc(db, "markets", mode), { 
+        preset_result: presetVal 
+      }, { merge: true });
+      
+      alert(`Preset result updated for Win Go ${mode}!`);
     };
+
+    // Sync Preset Results from Database to Admin Inputs
+    ['30s', '1m', '3m', '5m'].forEach(mode => {
+      onSnapshot(doc(db, "markets", mode), (docSnap) => {
+        if(docSnap.exists()) {
+          const preset = docSnap.data().preset_result;
+          const selectElem = document.getElementById(`signal-${mode}`);
+          if(selectElem) {
+            selectElem.value = (preset === null || preset === undefined) ? 'auto' : preset.toString();
+          }
+        }
+      });
+    });
 
     // Handle Requests & Dashboard Calculator
     onSnapshot(collection(db, "requests"), (snapshot) => {
@@ -424,7 +473,7 @@
         if(req.status === 'pending') {
           html += `
             <tr>
-              <td>${req.userPhone || req.user}</td>
+              <td>${req.userPhone || req.user || 'N/A'}</td>
               <td><b>${(req.type || '').toUpperCase()}</b></td>
               <td>৳${amt}</td>
               <td>${req.details || req.trxId || 'N/A'}</td>
