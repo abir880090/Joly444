@@ -1101,23 +1101,6 @@
 
     updatePaginationUI();
     updateUI();
-    // wingo.html script
-let activeMarket = "1m"; // User active market
-
-// Real-time listener for result update
-db.collection('markets').doc(activeMarket)
-  .onSnapshot((doc) => {
-    let data = doc.data();
-    
-    // UI Update logic
-    document.getElementById('period_id').innerText = data.current_period;
-    
-    // Timer শেষ হলে রেজাল্ট দেখানোর লজিক
-    if (data.next_result) {
-      console.log("Upcoming Result:", data.next_result);
-      // Winner calculation UI code ekhane hobe
-    }
-});
   </script>
 </body>
 </html>
